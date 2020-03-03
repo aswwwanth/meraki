@@ -1,8 +1,8 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import RegistrationForm, LoginForm
-from app.models import User
+from app.forms import RegistrationForm, LoginForm, CreateTeam
+from app.models import User, Team
 import math, random
 
 def generateOTP():
@@ -15,6 +15,8 @@ def generateOTP():
 
 @app.route('/')
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     return render_template("index.html")
  
 @app.route('/register', methods=['GET','POST'])
@@ -39,7 +41,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
@@ -58,4 +60,21 @@ def logout():
 @login_required
 def dashboard():
     return render_template('dashboard.html', title="Dashboard", user=current_user)
-    
+
+@app.route('/create_team', methods=['GET', 'POST'])
+@login_required
+def create_team():
+    form = CreateTeam()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            team = Team( 
+                tname=form.tname.data, 
+                tdesc=form.tdesc.data,
+                tadmin=current_user.id
+            )
+            team.set_team_code()
+            db.session.add(team)
+            db.session.commit()
+            return render_template('success_team.html')
+        return jsonify(data=form.errors)
+    return render_template('create_team.html', title="Create team", user=current_user, form=form)

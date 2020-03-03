@@ -39,8 +39,9 @@ class Team(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	tcode = db.Column(db.String(256))
 	tname = db.Column(db.String(256))
+	tdesc = db.Column(db.Text)
 	tadmin = db.Column(db.Integer, db.ForeignKey(User.id))
 
-	def set_team_code(self, password):
+	def set_team_code(self):
 		self.tcode = generateTeamCode()
 

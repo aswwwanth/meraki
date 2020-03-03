@@ -46,3 +46,8 @@ body{
     background-color: #fff;
     box-shadow: 0 .2rem .4rem -.075rem rgba(0,0,0,.1);
 }
+
+.team-card:hover{
+    background-color:f3f2f1;
+    cursor: pointer;
+}
