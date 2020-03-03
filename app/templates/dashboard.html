@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<link rel="stylesheet" href="/static/css/dashboard.css">
 <div class="container">
     <h1>Hello {{ user.fname }}!</h1>
+    <br>
+    <div class="team-head">
+        <div class="team-head-left">
+            <h2>Your teams</h2>
+        </div>
+        <div class="team-head-right">
+            <a href="\join_team"><input type="submit" value="Join team" style="margin-right: 15px;"></a>
+            <a href="\create_team"><input type="submit" value="Create team"></a>
+        </div>
+    </div>
     <div class="teams-view">
-
+        <div class="team-card"><h1>Team One</h1></div>
+        <div class="team-card"><h1>Team Two</h1></div>
+        <div class="team-card"><h1>Team Three</h1></div>
+        <div class="team-card"><h1>Team Four</h1></div>
+        <div class="team-card"><h1>Team Five</h1></div>
+        <div class="team-card"><h1>Team Six</h1></div>
     </div>
 </div>
 
