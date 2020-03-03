@@ -13,6 +13,8 @@ body{
 
 .header{
     height: 60px;
+    font-family: 'Catamaran';
+    font-size: 1.5em;
     width: 100%;
     background: #000;
     color: #fff;

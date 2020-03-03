@@ -1,0 +1,25 @@
+.home-container{
+    height: 100%;
+    width: 100%;
+    padding: 100px 0px 0px 50px;
+    position: fixed;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-areas: "lt rt";
+}
+
+.home-left, .home-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-left{
+    grid-area: lt;
+}
+
+.home-right{
+    grid-area: rt;
+    text-align: justify;
+    padding: 80px;
+}

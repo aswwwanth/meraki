@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="container">
-    <center>
-        <h1>Welcome to Meraki</h1>
-        <p>Get started. Create an account.<a href="/register">Register</a></p>
-    </center>
+<link rel="stylesheet" href="/static/css/index.css">
+<div class="home-container">
+    <div class="home-left">
+        <img src="/static/images/home_page2.jpg" height="750px">
+    </div>
+    <div class="home-right">
+        <div>
+            <h1>Welcome to <span stye="font-family: Catamaran">Meraki</span></h1>
+            <p>
+                This Collaborative Team Work Tool is a web platform that helps you and your team to communicate and work together seamlessly. It is designed to support the way people naturally work together. You can collaborate with people online as efficiently as you do face-to-face, using a smart device. This progressive web-app will help the team increase their productivity. 
+            </p>
+            <br>
+            <p>Create an account and get started.</p>
+            <br>
+            <a href="/register"><input type="submit" value="Register"></submit></a>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
