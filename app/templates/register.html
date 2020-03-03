@@ -10,10 +10,8 @@
                 url: url,
                 data: $('form').serialize(),
                 success: function (data) {
-                    console.log(data);
-                    console.log(data.length);
+                    // console.log(data);
                     if(!data.hasOwnProperty('data')){
-                        console.log("TESTING");
                         $(".st-form-container").html(data);
                     }
                 }

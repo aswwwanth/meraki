@@ -1,10 +1,10 @@
 from app import db
-# from app import login
-# from flask_login import UserMixin
+from app import login
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True, autoincrement= True)
 	email = db.Column(db.String(256),index=True)
 	fname = db.Column(db.String(75), nullable=False)
@@ -21,5 +21,9 @@ class User(db.Model):
 
 	def super(self):
 		return self.email=='aswanth366@gmail.com'
+
+@login.user_loader
+def load_user(id):
+	return User.query.get(id)
 
 
