@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    $(document).ready(function() {
+        $('form').submit(function (e) {
+            var url = "{{ url_for('register') }}";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('form').serialize(),
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.length);
+                    if(!data.hasOwnProperty('data')){
+                        console.log("TESTING");
+                        $(".st-form-container").html(data);
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+    });
+</script>
+
+<div class="st-form-container">
+
+    <div class="st-form">
+
+        <h1>Register</h1>
+        <p>Please fill in the following details an complete your registeration</p>
+        <p>Already have an account ? <a href="/login"><span class="link">Login</span></a></p>
+        <br>
+        <form action="" method="post" novalidate autocomplete="off">
+            {{ form.hidden_tag() }}
+            <div class="st-form-field">
+                {{ form.fname }}
+            </div>
+            <div class="st-form-errors">
+                <span>ERROR</span>
+            </div>
+            <div class="st-form-field">
+                {{ form.lname }}
+            </div>
+            <div class="st-form-errors">
+                <span>ERROR</span>
+            </div>
+            <div class="st-form-field">
+                {{ form.email }}
+            </div>
+            <div class="st-form-errors">
+                <span>ERROR</span>
+            </div>
+            <div class="st-form-field">
+                {{ form.password }}
+            </div>
+            <div class="st-form-errors">
+                <span>ERROR</span>
+            </div>
+            <p><input type="submit" value="Register"></p>
+        </form>
+    
+    </div>
+
+</div>
+
+{% endblock %}

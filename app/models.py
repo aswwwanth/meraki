@@ -21,3 +21,5 @@ class User(db.Model):
 
 	def super(self):
 		return self.email=='aswanth366@gmail.com'
+
+

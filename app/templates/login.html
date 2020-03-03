@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="st-form-container">
+
+        <div class="st-form">
+
+            <h1>Sign In</h1>
+            <p>Please sign in to your account to continue</p>
+            <br>
+            <form action="" method="post" novalidate autocomplete="off">
+                {{ form.hidden_tag() }}
+                <div class="st-form-field">
+                    {{ form.email }}
+                </div>
+                <div class="st-form-errors">
+                    <span>ERROR</span>
+                </div>
+                <div class="st-form-field">
+                    {{ form.password }}
+                </div>
+                <div class="st-form-errors">
+                    <span>ERROR</span>
+                </div>
+                <p>{{ form.submit }}</p>
+                <p>Don't have an account ? <a href="/register"><span class="link">Register</span></a></p>
+            </form>
+        
+        </div>
+    
+    </div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+.st-form-container{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.st-form-container a{
+    color: #000;
+    text-decoration: none;
+}
+
+.st-form-container a .link{
+    border-bottom: 2px solid #000;
+}
+
+.st-form p{
+    margin-bottom: 15px;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"] {
+    /* width: 350px; */
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+    border: none;
+    padding: 5px;
+    font-size: 18px;
+}
+
+input[type="submit"]{
+    border: 2px solid #000;
+    background: #000;
+    color: #fff;
+    width: 150px;
+    height: 40px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover{
+    color: #000;
+    background: #fff;
+}
+
+.st-form-field{
+    height: 60px;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    color: 	#D3D3D3;
+}
+.st-form-errors{
+    visibility: hidden;
+    margin-bottom: 20px;
+    color: #FF0800;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-family: 'Source Sans Pro', sans-serif;
+}
+::-moz-placeholder { /* Firefox 19+ */
+    font-family: 'Source Sans Pro', sans-serif;
+}
+:-ms-input-placeholder { /* IE 10+ */
+    font-family: 'Source Sans Pro', sans-serif;
+}
+:-moz-placeholder { /* Firefox 18- */
+    font-family: 'Source Sans Pro', sans-serif;
+}

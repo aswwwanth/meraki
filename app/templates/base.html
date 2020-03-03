@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400|Source+Sans+Pro" rel="stylesheet">
+        <link href="https://cloud.typenetwork.com/projects/3030/fontface.css/" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="/static/css/base.css">
+        <link rel="stylesheet" href="/static/css/form.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        {% if title %}
+        <title>{{ title }} - Meraki</title>
+        {% else %}
+        <title>Meraki</title>
+        {% endif %}
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-logo">
+                <a href="/">Meraki</a>
+            </div>
+        </div>
+        {% block content %}{% endblock %}
+    </body>
+</html>
