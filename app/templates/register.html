@@ -10,8 +10,44 @@
                 url: url,
                 data: $('form').serialize(),
                 success: function (data) {
-                    // console.log(data);
-                    if(!data.hasOwnProperty('data')){
+                    console.log(data);
+                    if(data.hasOwnProperty('data')){    
+                        data = data.data;
+
+                        if(data.hasOwnProperty('email')){
+                            $(".st-form-errors.email span").html(data['email']);
+                            $(".st-form-errors.email").css('display', 'block');
+                        }
+                        else{
+                            $(".st-form-errors.email").css('display', 'none');
+                        }
+
+                        if(data.hasOwnProperty('fname')){
+                            $(".st-form-errors.fname span").html(data['fname']);
+                            $(".st-form-errors.fname").css('display', 'block');
+                        }
+                        else{
+                            $(".st-form-errors.fname").css('display', 'none');
+                        }
+
+                        if(data.hasOwnProperty('lname')){
+                            $(".st-form-errors.lname span").html(data['lname']);
+                            $(".st-form-errors.lname").css('display', 'block');
+                        }
+                        else{
+                            $(".st-form-errors.lname").css('display', 'none');
+                        }
+
+                        if(data.hasOwnProperty('password')){
+                            $(".st-form-errors.password span").html(data['password']);
+                            $(".st-form-errors.password").css('display', 'block');
+                        }
+                        else{
+                            $(".st-form-errors.password").css('display', 'none');
+                        }
+                        
+                    }
+                    else{
                         $(".st-form-container").html(data);
                     }
                 }
@@ -34,35 +70,26 @@
     <div class="st-form">
 
         <h1>Register</h1>
-        <p>Please fill in the following details an complete your registeration</p>
+        <p>Please fill in the following details and complete your registeration</p>
         <p>Already have an account ? <a href="/login"><span class="link">Login</span></a></p>
-        <br>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
-            <div class="st-form-field">
+            <div class="st-form-field fname">
                 {{ form.fname }}
             </div>
-            <div class="st-form-errors">
-                <span>ERROR</span>
-            </div>
+            <div class="st-form-errors fname"><span></span></div>
             <div class="st-form-field">
                 {{ form.lname }}
             </div>
-            <div class="st-form-errors">
-                <span>ERROR</span>
-            </div>
+            <div class="st-form-errors lname"><span></span></div>
             <div class="st-form-field">
                 {{ form.email }}
             </div>
-            <div class="st-form-errors">
-                <span>ERROR</span>
-            </div>
+            <div class="st-form-errors email"><span></span></div>
             <div class="st-form-field">
                 {{ form.password }}
             </div>
-            <div class="st-form-errors">
-                <span>ERROR</span>
-            </div>
+            <div class="st-form-errors password"><span></span></div>
             <p><input type="submit" value="Register"></p>
         </form>
     

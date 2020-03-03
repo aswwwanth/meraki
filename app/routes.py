@@ -15,9 +15,7 @@ def generateOTP():
 
 @app.route('/')
 def home():
-    if current_user.is_authenticated:
-        return current_user.fname
-    return "TESTING"
+    return render_template("index.html")
  
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -57,6 +55,7 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    return ("Welcome " + current_user.fname + "!")
+    return render_template('dashboard.html', title="Dashboard", user=current_user)
     

@@ -16,7 +16,7 @@
                         window.location = '/dashboard';
                     else if(data.data.hasOwnProperty('error')){
                         $(".st-form-errors span").html(data.data['error']);
-                        $(".st-form-errors").css('visibility', 'visible');
+                        $(".st-form-errors").css('display', 'block');
                     }
                 }
             });
@@ -39,7 +39,6 @@
 
         <h1>Sign In</h1>
         <p>Please sign in to your account to continue</p>
-        <br>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
             <div class="st-form-field">

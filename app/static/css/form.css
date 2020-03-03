@@ -23,8 +23,7 @@
 input[type="text"], 
 input[type="email"], 
 input[type="password"] {
-    /* width: 350px; */
-    width: 100%;
+    width: 350px;
     max-width: 100%;
     height: 50px;
     border: none;
@@ -53,10 +52,11 @@ input[type="submit"]:hover{
     display: flex;
     align-items: center;
     margin-bottom: 5px;
+    margin-top: 15px;
     color: 	#D3D3D3;
 }
 .st-form-errors{
-    visibility: hidden;
+    display: none;
     margin-bottom: 20px;
     color: #FF0800;
 }
