@@ -2,6 +2,24 @@
 
 {% block content %}
 <link rel="stylesheet" href="/static/css/team-view.css">
+<!-- <script>
+    $(document).ready(function() {
+        $('.add-member').click(function(){
+            $('#page-mask').css('display', 'block');
+            var url = "{{ url_for('login') }}";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('.pop-up').html(data);        
+                }
+            });
+            $('.pop-up').css('display', 'block');
+        });
+    });
+</script> -->
+<div class="pop-up"></div>
+
 <div class="container">
     <div class="team-details">
         <div class="team-details-left">
@@ -19,7 +37,7 @@
                         <input type="submit" value="Leave team">
                         {% endif %}
                         {% if checkAdmin == True %}
-                        <input type="submit" value="Add Member" style="width: 120px; margin-right: 10px;">
+                        <input type="submit" class ="add-member" value="Add Member" style="width: 120px; margin-right: 10px;">
                         <input type="submit" value="Delete Team" style="width: 120px">
                         {% endif %}
                     </center>
