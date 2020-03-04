@@ -10,6 +10,14 @@ body{
     width: 100%;
 }
 
+a{
+    color: #000000;
+    text-decoration: none;
+}
+
+a .link{
+    border-bottom: 2px solid #000;
+}
 
 .header{
     height: 60px;

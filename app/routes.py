@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import RegistrationForm, LoginForm, CreateTeam
+from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
 from app.models import User, Team, TeamMember
 import math, random
 
@@ -91,3 +91,13 @@ def create_team():
             return render_template('success_team.html', tcode=team_code)
         return jsonify(data=form.errors)
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
+
+@app.route('/join_team')
+@login_required
+def join_team():
+    return "TESTIING"
+
+@app.route('/team/<id>')
+@login_required
+def view_team(id):
+    return render_template('team.html', i)

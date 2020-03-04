@@ -5,7 +5,7 @@
 <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('create_team') }}";
+            var url = "{{ url_for('join_team') }}";
             $.ajax({
                 type: "POST",
                 url: url,
@@ -36,17 +36,14 @@
 
     <div class="st-form">
 
-        <h1>Create Team</h1>
-        <p>Please provide the following details for your team.</p>
+        <h1>Join Team</h1>
+        <p></p>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
             <div class="st-form-field">
-                {{ form.tname }}
+                {{ form.tcode }}
             </div>
             <div class="st-form-errors"><span></span></div>
-            <div class="st-form-field textarea">
-                {{ form.tdesc }}
-            </div>
             <p>{{ form.submit }}</p>
         </form>
     

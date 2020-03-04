@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <link rel="stylesheet" href="/static/css/dashboard.css">
 <div class="container">
     <h1>Hello {{ user.fname }}!</h1>
@@ -17,7 +18,7 @@
     <div class="teams-view">
         {% if teams %}
             {% for item in teams %}
-                <div class="team-card"><h1>{{ item.Team.tname }}</h1></div>    
+                <a href="\team\{{ item.Team.tcode }}""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
             {% endfor %}
         {% endif %}
     </div>
