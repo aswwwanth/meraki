@@ -15,12 +15,11 @@
         </div>
     </div>
     <div class="teams-view">
-        <div class="team-card"><h1>Team One</h1></div>
-        <div class="team-card"><h1>Team Two</h1></div>
-        <div class="team-card"><h1>Team Three</h1></div>
-        <div class="team-card"><h1>Team Four</h1></div>
-        <div class="team-card"><h1>Team Five</h1></div>
-        <div class="team-card"><h1>Team Six</h1></div>
+        {% if teams %}
+            {% for item in teams %}
+                <div class="team-card"><h1>{{ item.Team.tname }}</h1></div>    
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 

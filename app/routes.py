@@ -59,7 +59,8 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', title="Dashboard", user=current_user)
+    teams = db.session.query(Team, TeamMember).filter(Team.id == TeamMember.tid, TeamMember.mid == current_user.id).all()
+    return render_template('dashboard.html', title="Dashboard", user=current_user, teams=teams)
 
 @app.route('/create_team', methods=['GET', 'POST'])
 @login_required
