@@ -119,4 +119,8 @@ def join_team():
 @app.route('/team/<id>')
 @login_required
 def view_team(id):
-    return render_template('team.html')
+    team = Team.query.filter_by(tcode=id).first()
+    boolAdmin = False;
+    if current_user.id == team.tadmin:
+        boolAdmin = True;
+    return render_template('team.html', checkAdmin=boolAdmin, team=team)

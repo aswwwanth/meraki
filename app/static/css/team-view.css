@@ -1,0 +1,25 @@
+.container{
+    padding: 60px 0px 0px 0px;
+}
+.team-details{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-areas: "lt rt";
+} 
+
+.team-details-left, .team-details-right{
+    padding: 50px;
+}
+
+.team-details-left{
+    grid-area: lt;
+    text-align: justify;
+}
+
+.team-details-right{
+    grid-area: rt;
+    background-color: #f3f2f1;
+}
