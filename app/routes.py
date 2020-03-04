@@ -2,16 +2,16 @@ from app import app, db
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import RegistrationForm, LoginForm, CreateTeam
-from app.models import User, Team
+from app.models import User, Team, TeamMember
 import math, random
 
-def generateOTP():
+def generateCode():
 	string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	OTP = "" 
 	length = len(string)
 	for i in range(6):
 		OTP += string[math.floor(random.random() * length)] 
-	return OTP 
+	return OTP  
 
 @app.route('/')
 def home():
@@ -28,7 +28,7 @@ def register():
                 email=form.email.data.lower(), 
                 fname=form.fname.data,
                 lname=form.lname.data,
-                verify=generateOTP()
+                verify=generateCode()
             )
             user.set_password(form.password.data)
             db.session.add(user)
@@ -67,14 +67,26 @@ def create_team():
     form = CreateTeam()
     if request.method == 'POST':
         if form.validate_on_submit():
+            
+            team_code = generateCode()
             team = Team( 
                 tname=form.tname.data, 
                 tdesc=form.tdesc.data,
-                tadmin=current_user.id
+                tadmin=current_user.id,
+                tcode=team_code
             )
-            team.set_team_code()
             db.session.add(team)
             db.session.commit()
+            
+            team = team.query.filter_by(tcode=team_code).first()
+            
+            member = TeamMember(
+                tid = team.id,
+                mid = current_user.id
+            )
+            db.session.add(member)
+            db.session.commit()
+
             return render_template('success_team.html')
         return jsonify(data=form.errors)
     return render_template('create_team.html', title="Create team", user=current_user, form=form)

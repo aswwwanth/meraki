@@ -4,14 +4,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime, math, random
 
-def generateTeamCode():
-	string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	team_code = "" 
-	length = len(string)
-	for i in range(6):
-		team_code += string[math.floor(random.random() * length)] 
-	return team_code 
-
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True, autoincrement= True)
 	email = db.Column(db.String(256),index=True)
@@ -42,6 +34,7 @@ class Team(db.Model):
 	tdesc = db.Column(db.Text)
 	tadmin = db.Column(db.Integer, db.ForeignKey(User.id))
 
-	def set_team_code(self):
-		self.tcode = generateTeamCode()
+class TeamMember(db.Model):
 
+	tid = db.Column(db.Integer, db.ForeignKey(Team.id), primary_key=True)
+	mid = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
