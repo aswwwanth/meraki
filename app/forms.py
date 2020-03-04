@@ -31,5 +31,5 @@ class CreateTeam(FlaskForm):
     submit = SubmitField('Create team')
 
 class JoinTeam(FlaskForm):
-    tcode = StringField('Team Code', validators=[DataRequired], render_kw={"placeholder": "Team Code"})
-    submit = SubmitField('Create team')
+    tcode = StringField('Team Code', validators=[DataRequired()], render_kw={"placeholder": "Team Code"})
+    submit = SubmitField('Join team')

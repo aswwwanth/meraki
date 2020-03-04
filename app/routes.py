@@ -92,12 +92,31 @@ def create_team():
         return jsonify(data=form.errors)
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
 
-@app.route('/join_team')
+@app.route('/join_team', methods=['GET', 'POST'])
 @login_required
 def join_team():
-    return "TESTIING"
+    form = JoinTeam()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            team = Team.query.filter_by(tcode=form.tcode.data).first()
+            if team is None:
+                return jsonify(data={'tcode': 'Team doesnt exist.'})
+            
+            team = team.query.filter_by(tcode=form.tcode.data).first()
+
+            member = TeamMember(
+                tid = team.id,
+                mid = current_user.id
+            )
+            db.session.add(member)
+            db.session.commit()
+
+            print(team)
+            return jsonify(data={'status': 200}) 
+        return jsonify(data=form.errors) 
+    return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
 @app.route('/team/<id>')
 @login_required
 def view_team(id):
-    return render_template('team.html', i)
+    return render_template('team.html')

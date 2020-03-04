@@ -11,10 +11,10 @@
                 url: url,
                 data: $('form').serialize(),
                 success: function (data) {
-                    if(!data.hasOwnProperty('data'))
-                        $(".st-form-container").html(data);
-                    else if(data.hasOwnProperty('data')){
-                        $(".st-form-errors span").html(data.data['error']);
+                    if(data.hasOwnProperty('data') && data.data['status'] == 200)
+                        window.location = '/dashboard';
+                    else{
+                        $(".st-form-errors span").html(data.data['tcode']);
                         $(".st-form-errors").css('display', 'block');
                     }
                 }
@@ -36,8 +36,8 @@
 
     <div class="st-form">
 
-        <h1>Join Team</h1>
-        <p></p>
+        <h1>Join a team</h1>
+        <p>Enter the team code.</p>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
             <div class="st-form-field">
