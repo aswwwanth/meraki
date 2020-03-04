@@ -88,6 +88,6 @@ def create_team():
             db.session.add(member)
             db.session.commit()
 
-            return render_template('success_team.html')
+            return render_template('success_team.html', tcode=team_code)
         return jsonify(data=form.errors)
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
