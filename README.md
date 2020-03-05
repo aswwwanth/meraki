@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 Flask-Migrate extension is currently in use in the application in order to track the changes made frequently to the database schema. This results in the need to manually migrating the database with each change.
 
-If using a seperate database, please perform the following operations on first use to build the necessary database tables. Please DO NOT perform if using the existing clould instances.
+If using a seperate database, set-up the PostgreSQL database with configuration specified in the file `config.py`. Please perform the following operations on first use to build the necessary database tables. Please DO NOT perform if using the existing clould instances.
 
 ~~~
 flask db init
