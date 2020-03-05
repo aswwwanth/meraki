@@ -19,7 +19,7 @@ def home():
         return redirect(url_for('dashboard'))
     return render_template("index.html")
  
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register/', methods=['GET','POST'])
 def register():
     form = RegistrationForm()
     if request.method == 'POST':
@@ -38,7 +38,7 @@ def register():
 
     return render_template('register.html', title="Register", form=form)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
@@ -51,18 +51,18 @@ def login():
         return jsonify(data={'status': 200})
     return render_template('login.html', title="Login", form=form)
  
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/dashboard')
+@app.route('/dashboard/')
 @login_required
 def dashboard():
     teams = db.session.query(Team, TeamMember).filter(Team.id == TeamMember.tid, TeamMember.mid == current_user.id).all()
     return render_template('dashboard.html', title="Dashboard", user=current_user, teams=teams)
 
-@app.route('/create_team', methods=['GET', 'POST'])
+@app.route('/create_team/', methods=['GET', 'POST'])
 @login_required
 def create_team():
     form = CreateTeam()
@@ -92,7 +92,7 @@ def create_team():
         return jsonify(data=form.errors)
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
 
-@app.route('/join_team', methods=['GET', 'POST'])
+@app.route('/join_team/', methods=['GET', 'POST'])
 @login_required
 def join_team():
     form = JoinTeam()
@@ -116,7 +116,7 @@ def join_team():
         return jsonify(data=form.errors) 
     return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
-@app.route('/team/<id>')
+@app.route('/team/<id>/')
 @login_required
 def view_team(id):
     team = Team.query.filter_by(tcode=id).first()
