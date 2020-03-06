@@ -1,4 +1,63 @@
-<div style="padding: 50px">
-    <h2>Enter username</h2>
+<script>
+    $(document).on('submit', 'form', function(e) {
+        e.preventDefault();
+        var url = "/team/add/{{ team.tcode }}/";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $('form').serialize(),
+            success: function (data) {
+                replace = "<center><div style=\"padding: 35px;\"><center><img src=\"/static/images/icons/tick.png\" height=\"90px\"></center><div style=\"margin-top: 15px; margin-bottom: 15px;\"><h1>Successfully Added.</h1><p>Member successfully added to {{ team.tname }}</p></div><input type=\"submit\" value=\"Close\" class=\"close-popup\"></div></center>";
+                if(data.data['status'] == 200){
+                    $(".pop-up").html(replace)
+                    $('.close-popup').click(function(){
+                        $('.pop-up').css('display', 'none');
+                        $('#page-mask').css('display', 'none');
+                    });
+                }
+                else if(data.data['mid']){
+                    $(".st-form-errors span").html(data.data['mid']);
+                    $(".st-form-errors").css('display', 'block');
+                }
+            }
+        });
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+    }); 
+
+    $(document).on('click', '.cancel-add-member', function(){
+        $('.pop-up').css('display', 'none');
+        $('.pop-up').html('');
+        $('#page-mask').css('display', 'none'); 
+    });
+</script>
+<div class="st-form-container">
+
+    <div class="st-form">
+        <style>
+            input[type="submit"], input[type="button"]{
+                width: 170px;
+            }
+        </style>
+        <h1>Add Member</h1>
+        <p>Please enter the username of the user.</p>
+        <form action="" method="post" novalidate autocomplete="off">
+            {{ form.hidden_tag() }}
+            <div class="st-form-field">
+                {{ form.mid }}
+            </div>
+            <div class="st-form-errors"><span></span></div>
+            <p>{{ form.submit }}
+            <input style="margin-left: 10px;" type="button" class="cancel-add-member" value="Cancel">
+            </p>
+        </form>
     
+    </div>
+
 </div>

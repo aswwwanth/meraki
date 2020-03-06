@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
+from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam, AddMember
 from app.models import User, Team, TeamMember
 import math, random
 
@@ -118,11 +118,37 @@ def join_team():
     
     return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
-@app.route('/team/<id>/')
+@app.route('/team/<tcode>/')
 @login_required
-def view_team(id):
-    team = Team.query.filter_by(tcode=id).first()
+def view_team(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
     boolAdmin = False;
     if current_user.id == team.tadmin:
         boolAdmin = True;
     return render_template('team.html', checkAdmin=boolAdmin, team=team)
+
+@app.route('/team/add/<tcode>/', methods=['GET', 'POST'])
+@login_required
+def add_team_member(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    if current_user.id == team.tadmin:
+        form = AddMember()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                return jsonify(data={'status': 200})
+            return jsonify(data=form.errors)
+        return render_template('add_member.html', form=form, team=team)
+    else:
+        return "Access denied."
+
+@app.route('/team/delete/<tcode>/', methods=['GET', 'POST'])
+@login_required
+def delete_team(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    if current_user.id == team.tadmin:
+        if request.method == 'POST':
+
+            return jsonify(data={'status': 200})
+        return render_template('delete_team.html', team=team)
+    else:
+        return "Access denied."

@@ -2,30 +2,48 @@
 
 {% block content %}
 <link rel="stylesheet" href="/static/css/team-view.css">
-<!-- <script>
+<script>
     $(document).ready(function() {
-        
+        function closePopup(){
+            $('.pop-up').css('display', 'none');
+            $('#page-mask').css('display', 'none'); 
+        }
+        document.title = '{{ team.tname }} | Meraki';
         $('.add-member').click(function(){
             $('#page-mask').css('display', 'block');
-            var url = "{{ url_for('login') }}";
+            var url = "/team/add/{{ team.tcode }}/";
             $.ajax({
                 type: "GET",
                 url: url,
                 success: function (data) {
-                    $('.pop-up').html(data);        
+                    $('.pop-up').html(data);      
                 }
             });
             $('.pop-up').css('display', 'block');
         });
+
+        $('.delete-team').click(function(){
+            $('#page-mask').css('display', 'block');
+            var url = "/team/delete/{{ team.tcode }}/";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('.pop-up').html(data);      
+                }
+            });
+            $('.pop-up').css('display', 'block');
+        });
+
     });
-</script> -->
+</script>
 <div class="pop-up"></div>
 
 <div class="container">
     <div class="team-details">
         <div class="team-details-left">
             <div>
-                <a href="\dashboard">
+                <a href="/dashboard/">
                 <div class="back-to-dash">
                     <img src="\static\images\icons\back1.png" height="10px">
                     <p>All teams</p>
@@ -45,7 +63,7 @@
                         {% endif %}
                         {% if checkAdmin == True %}
                         <input type="submit" class ="add-member" value="Add Member" style="width: 120px; margin-right: 10px;">
-                        <input type="submit" value="Delete Team" style="width: 120px">
+                        <input type="submit" class ="delete-team" value="Delete Team" style="width: 120px">
                         {% endif %}
                     </center>
                 </div>

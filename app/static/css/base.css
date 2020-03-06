@@ -38,6 +38,7 @@ a .link{
     background-color: #fff;
     display: none;
     
+    border-radius: .3rem;
     position:absolute;
     left:0; right:0;
     top:0; bottom:0;

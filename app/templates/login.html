@@ -13,7 +13,7 @@
                 success: function (data) {
                     // console.log(data);
                     if(data.data.hasOwnProperty('status') && data.data['status'] == 200)
-                        window.location = '/dashboard';
+                        window.location = '/dashboard/';
                     else if(data.data.hasOwnProperty('error')){
                         $(".st-form-errors span").html(data.data['error']);
                         $(".st-form-errors").css('display', 'block');
@@ -51,7 +51,7 @@
                 <span>ERROR</span>
             </div>
             <p>{{ form.submit }}</p>
-            <p>Don't have an account ? <a href="/register"><span class="link">Register</span></a></p>
+            <p>Don't have an account ? <a href="/register/"><span class="link">Register</span></a></p>
         </form>
     
     </div>

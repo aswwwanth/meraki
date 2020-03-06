@@ -11,14 +11,14 @@
             <h2>Your teams</h2>
         </div>
         <div class="team-head-right">
-            <a href="\team\join"><input type="submit" value="Join team" style="margin-right: 15px;"></a>
-            <a href="\team\create"><input type="submit" value="Create team"></a>
+            <a href="/team/join/"><input type="submit" value="Join team" style="margin-right: 15px;"></a>
+            <a href="/team/create/"><input type="submit" value="Create team"></a>
         </div>
     </div>
     <div class="teams-view">
         {% if teams %}
             {% for item in teams %}
-                <a href="\team\{{ item.Team.tcode }}""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
+                <a href="/team/{{ item.Team.tcode }}/""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
             {% endfor %}
         {% endif %}
     </div>
