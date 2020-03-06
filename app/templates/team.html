@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/static/css/team-view.css">
 <!-- <script>
     $(document).ready(function() {
+        
         $('.add-member').click(function(){
             $('#page-mask').css('display', 'block');
             var url = "{{ url_for('login') }}";
@@ -24,6 +25,12 @@
     <div class="team-details">
         <div class="team-details-left">
             <div>
+                <a href="\dashboard">
+                <div class="back-to-dash">
+                    <img src="\static\images\icons\back1.png" height="10px">
+                    <p>All teams</p>
+                </div>
+                </a>
                 <center>
                     <img src="\static\images\teamwork.png" height="100px">
                     <h1 style="margin-top: 10px;">{{ team.tname }}</h1>

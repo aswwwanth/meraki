@@ -23,3 +23,16 @@
     grid-area: rt;
     background-color: #f3f2f1;
 }
+
+.back-to-dash{
+    margin-bottom: 20px;
+}
+
+.back-to-dash:hover{
+    color: #505050;
+    
+}
+
+.back-to-dash p{
+    display: inline-block;
+}

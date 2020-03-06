@@ -62,7 +62,7 @@ def dashboard():
     teams = db.session.query(Team, TeamMember).filter(Team.id == TeamMember.tid, TeamMember.mid == current_user.id).all()
     return render_template('dashboard.html', title="Dashboard", user=current_user, teams=teams)
 
-@app.route('/create_team/', methods=['GET', 'POST'])
+@app.route('/team/create/', methods=['GET', 'POST'])
 @login_required
 def create_team():
     form = CreateTeam()
@@ -90,9 +90,10 @@ def create_team():
 
             return render_template('success_team.html', tcode=team_code)
         return jsonify(data=form.errors)
+
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
 
-@app.route('/join_team/', methods=['GET', 'POST'])
+@app.route('/team/join/', methods=['GET', 'POST'])
 @login_required
 def join_team():
     form = JoinTeam()
@@ -114,6 +115,7 @@ def join_team():
             print(team)
             return jsonify(data={'status': 200}) 
         return jsonify(data=form.errors) 
+    
     return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
 @app.route('/team/<id>/')

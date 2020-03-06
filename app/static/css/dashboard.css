@@ -42,7 +42,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 240px;
+    height: 220px;
     background-color: #fff;
     box-shadow: 0 .2rem .4rem -.075rem rgba(0,0,0,.1);
 }
