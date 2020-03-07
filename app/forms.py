@@ -7,6 +7,7 @@ class RegistrationForm(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired()], render_kw={"placeholder": "First Name"})
     lname = StringField('Last Name', validators=[DataRequired()], render_kw={"placeholder": "Last Name"})
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    username = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
     password = PasswordField('Password', validators=[DataRequired()],render_kw={"placeholder": "Password"})
     submit = SubmitField('Register')
 
@@ -21,7 +22,7 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()], render_kw={"placeholder": "Email"})
+    username = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
     submit = SubmitField('Sign In')
 
@@ -36,4 +37,4 @@ class JoinTeam(FlaskForm):
 
 class AddMember(FlaskForm):
     mid = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
-    submit = SubmitField('Add member')
+    submit = SubmitField('Add member', render_kw={"disabled": ""})

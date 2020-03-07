@@ -4,10 +4,6 @@
 <link rel="stylesheet" href="/static/css/team-view.css">
 <script>
     $(document).ready(function() {
-        function closePopup(){
-            $('.pop-up').css('display', 'none');
-            $('#page-mask').css('display', 'none'); 
-        }
         document.title = '{{ team.tname }} | Meraki';
         $('.add-member').click(function(){
             $('#page-mask').css('display', 'block');
@@ -19,6 +15,7 @@
                     $('.pop-up').html(data);      
                 }
             });
+            $('.pop-up').css('height', '550px');
             $('.pop-up').css('display', 'block');
         });
 
@@ -37,8 +34,7 @@
 
     });
 </script>
-<div class="pop-up"></div>
-
+<div class="pop-up" style="width: 650px"></div>
 <div class="container">
     <div class="team-details">
         <div class="team-details-left">

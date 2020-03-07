@@ -47,7 +47,12 @@ input[type="submit"], input[type="button"]{
     cursor: pointer;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover{
+input[type="submit"]:disabled, input[type="button"]:disabled{
+    border: grey;
+    background: grey;
+}
+
+input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled{
     color: #000;
     background: #fff;
 }

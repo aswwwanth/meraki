@@ -22,6 +22,14 @@
                             $(".st-form-errors.email").css('display', 'none');
                         }
 
+                        if(data.hasOwnProperty('username')){
+                            $(".st-form-errors.username span").html(data['username']);
+                            $(".st-form-errors.username").css('display', 'block');
+                        }
+                        else{
+                            $(".st-form-errors.username").css('display', 'none');
+                        }
+
                         if(data.hasOwnProperty('fname')){
                             $(".st-form-errors.fname span").html(data['fname']);
                             $(".st-form-errors.fname").css('display', 'block');
@@ -82,6 +90,10 @@
                 {{ form.lname }}
             </div>
             <div class="st-form-errors lname"><span></span></div>
+            <div class="st-form-field">
+                {{ form.username }}
+            </div>
+            <div class="st-form-errors username"><span></span></div>
             <div class="st-form-field">
                 {{ form.email }}
             </div>

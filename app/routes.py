@@ -24,9 +24,13 @@ def register():
     form = RegistrationForm()
     if request.method == 'POST':
         if form.validate_on_submit():
+            user = User.query.filter_by(username=form.username.data.lower()).first()
+            if user is not None:
+                return jsonify(data={'username', 'Username already exists.'})
             user = User( 
                 email=form.email.data.lower(), 
                 fname=form.fname.data,
+                username=form.username.data.lower(),
                 lname=form.lname.data,
                 verify=generateCode()
             )
@@ -43,12 +47,15 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower()).first()
-        if user is None or not user.check_password(form.password.data):
-            return jsonify(data={'error': 'Invalid username or Password'})
-        login_user(user)
-        return jsonify(data={'status': 200})
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(username=form.username.data.lower()).first()
+            if user is None or not user.check_password(form.password.data):
+                return jsonify(data={'error': 'Invalid username or Password'})
+            login_user(user)
+            return jsonify(data={'status': 200})
+        return jsonify(data={'error': 'Both username and password is required.'})
+    
     return render_template('login.html', title="Login", form=form)
  
 @app.route('/logout/')
@@ -134,9 +141,18 @@ def add_team_member(tcode):
     if current_user.id == team.tadmin:
         form = AddMember()
         if request.method == 'POST':
-            if form.validate_on_submit():
-                return jsonify(data={'status': 200})
-            return jsonify(data=form.errors)
+            user_list = request.form.getlist('users[]')
+            for uid in user_list:
+                check_user = TeamMember.query.filter_by(mid=uid,tid=team.id).first()
+                if check_user is None:
+                    # print(request.form.get('team'))
+                    member = TeamMember(
+                        tid = request.form.get('team'),
+                        mid = uid
+                    )
+                    db.session.add(member)
+                    db.session.commit()
+            return jsonify(data={'status': 200})
         return render_template('add_member.html', form=form, team=team)
     else:
         return "Access denied."
@@ -152,3 +168,20 @@ def delete_team(tcode):
         return render_template('delete_team.html', team=team)
     else:
         return "Access denied."
+
+@app.route('/users/search/<nlike>/', methods=['GET', 'POST'])
+@login_required
+def search_user(nlike):
+    search = "%" + nlike + "%"
+    user = User.query.filter(User.username.like(search)).all()
+    responseObject = []
+    for u in user:
+        responseObject.append({
+            'uid': u.id,
+            'username': u.username,
+            'fname': u.fname,
+            'lname': u.lname,
+            'email': u.email
+        })
+    return jsonify(responseObject)
+    

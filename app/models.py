@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
 	email = db.Column(db.String(256),index=True)
 	fname = db.Column(db.String(75), nullable=False)
 	lname = db.Column(db.String(75))
+	username = db.Column(db.String(256), unique=True)
 	password_hash = db.Column(db.String(256))
 	verify = db.Column(db.String(256))
 	isVerified = db.Column(db.Boolean, default=False)

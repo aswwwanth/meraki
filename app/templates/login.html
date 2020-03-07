@@ -11,8 +11,8 @@
                 url: url,
                 data: $('form').serialize(),
                 success: function (data) {
-                    // console.log(data);
-                    if(data.data.hasOwnProperty('status') && data.data['status'] == 200)
+                    console.log(data);
+                    if(data.data['status'] == 200)
                         window.location = '/dashboard/';
                     else if(data.data.hasOwnProperty('error')){
                         $(".st-form-errors span").html(data.data['error']);
@@ -42,7 +42,7 @@
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
             <div class="st-form-field">
-                {{ form.email }}
+                {{ form.username }}
             </div>
             <div class="st-form-field">
                 {{ form.password }}
