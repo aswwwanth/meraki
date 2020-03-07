@@ -11,8 +11,8 @@
     grid-template-areas: "lt rt";
 } 
 
-.team-details-left, .team-details-right{
-    padding: 50px;
+.team-details-left{
+    padding: 30px;
 }
 
 .team-details-left{
@@ -23,7 +23,24 @@
 
 .team-details-right{
     grid-area: rt;
+    display: grid;
+    grid-template-rows: 70px auto;
+    grid-template-areas:
+    'head'
+    'body';
     background: #f3f2f1;
+}
+
+.team-channel-head{
+    grid-area: head;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 0.5px solid #d1cfcf;
+}
+
+.team-channel-body{
+    grid-area: body;
 }
 
 .back-to-dash{
