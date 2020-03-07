@@ -28,16 +28,18 @@
                         }
                     }
                     if(!ok){
-                        $('.autocomplete-items').append("<div class=\"autocomplete-item\"><div>No such user exits</div></div>");
+                        $('.autocomplete-items').append("<div class=\"autocomplete-item\" id=\"-1\"><div>No such user exits</div></div>");
                     }
                     $('.autocomplete-item').click(function(){
-                        $('#submit').attr("disabled", false);
                         i = $(this).attr('id');
-                        html = "<div class=\"selected-user\" id=\"" + data[i]['username'] + "\"><div class=\"image\"><img src=\"/static/images/icons/user.png\"></div><div class=\"name\"><p>" + data[i]['fname'] + " " + data[i]['lname'] + "</p><p>" + data[i]['email'] + "</p></div><div class=\"close\"><img src=\"/static/images/icons/close.png\"></div></div>";
-                        $('.selected-users').append(html);
-                        $('.autocomplete-items').empty();
-                        $('#mid').val("");
-                        selected_users.push(data[i]['uid']);
+                        if(i > -1){
+                            $('#submit').attr("disabled", false);
+                            html = "<div class=\"selected-user\" id=\"" + data[i]['username'] + "\"><div class=\"image\"><img src=\"/static/images/icons/user.png\"></div><div class=\"name\"><p>" + data[i]['fname'] + " " + data[i]['lname'] + "</p><p>" + data[i]['email'] + "</p></div><div class=\"close\"><img src=\"/static/images/icons/close.png\"></div></div>";
+                            $('.selected-users').append(html);
+                            $('.autocomplete-items').empty();
+                            $('#mid').val("");
+                            selected_users.push(data[i]['uid']);
+                        }
                         // console.log(selected_users);
                     });
 

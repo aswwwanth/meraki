@@ -15,6 +15,10 @@ a{
     text-decoration: none;
 }
 
+a:hover{
+    cursor: pointer;
+}
+
 a .link{
     border-bottom: 2px solid #000;
 }

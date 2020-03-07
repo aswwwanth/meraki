@@ -1,10 +1,49 @@
 body{
     background-color: #f3f2f1;
 }
+
+.dash-wrapper{
+    height: 100%;
+    width: 100%;
+    padding-top: 60px;
+    display: grid;
+    grid-template-columns: 3% 97%; 
+    grid-template-areas: 'side teams';
+} 
+
+.dash-side{
+    grid-area: side;
+    background: #2e2d2c;
+}
+
+.dash-side-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.dash-side-item:hover{
+    cursor: pointer;
+    background: #575451;
+}
+
+.dash-side-item.active{
+    border-left: 3px solid white;
+}
+
+.dash-side-item img{
+    height: 28px;
+}
+.dash-right{
+    grid-area: teams;
+    margin: 50px;
+}
+
 .team-head{
     z-index:100;
-    width: 95%;
-    position: fixed;
+    width: 100%;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-areas: "lt rt";
@@ -27,10 +66,9 @@ body{
 }
 
 .teams-view{
-    margin-top: 60px;
-    margin-right: 50px;
+    margin-top: 20px;
     height: 100%;
-    width: 95%;
+    width: 100%;
     position: fixed;
     display: grid;
     grid-gap: 25px;
@@ -53,26 +91,28 @@ body{
 }
 
 .flash-notifications{
-    width: 97.5%;
-    margin-top: 10px;
-    height: 60px;
+    width: 100%;
+    margin-top: 20px;
+    box-sizing: content-box;
     background: lightgreen;
     display: grid;
-    grid-template-columns: 98% 2%;
+    grid-template-columns: 50% 50%;
     grid-template-areas: 'message close';
 }
 
 .close-flash, .flash-message{
     display: flex;
+    padding: 20px;
     align-items: center;
 }
 
 .flash-message{
-    padding: 20px;
     grid-area: message;
+    justify-content: flex-start;
 }
 
 .close-flash{
     grid-area: close;
+    justify-content: flex-end;
     cursor: pointer;
 }

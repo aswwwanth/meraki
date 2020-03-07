@@ -64,10 +64,16 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/dashboard/')
+@app.route('/dashboard/teams/')
 @login_required
 def dashboard():
     teams = db.session.query(Team, TeamMember).filter(Team.id == TeamMember.tid, TeamMember.mid == current_user.id).all()
-    return render_template('dashboard.html', title="Dashboard", user=current_user, teams=teams)
+    return render_template('dashboard-teams.html', title="Teams", user=current_user, teams=teams)
+
+@app.route('/dashboard/chat/')
+@login_required
+def chat():
+    return render_template('dashboard-chat.html', title="Chat");
 
 @app.route('/team/create/', methods=['GET', 'POST'])
 @login_required
@@ -162,10 +168,10 @@ def delete_team(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.id == team.tadmin:
         if request.method == 'POST':
-            team = Team.query.filter_by(tcode=tcode).first()
-            TeamMember.query.filter_by(tid=team.id).delete()
-            Team.query.filter_by(id=team.id).delete()
-            db.session.commit()
+            # team = Team.query.filter_by(tcode=tcode).first()
+            # TeamMember.query.filter_by(tid=team.id).delete()
+            # Team.query.filter_by(id=team.id).delete()
+            # db.session.commit()
             message = "Team " + team.tname + " is successfully deleted and all the data associated with it was removed from our system."
             flash(message)
             return redirect(url_for('dashboard'))

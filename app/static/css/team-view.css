@@ -1,5 +1,6 @@
-.container{
-    padding: 60px 0px 0px 0px;
+.dash-right{
+    margin: 0;
+    padding: 0;
 }
 .team-details{
     height: 100%;
@@ -17,11 +18,12 @@
 .team-details-left{
     grid-area: lt;
     text-align: justify;
+    background: #fff;
 }
 
 .team-details-right{
     grid-area: rt;
-    background-color: #f3f2f1;
+    background: #f3f2f1;
 }
 
 .back-to-dash{
@@ -30,7 +32,6 @@
 
 .back-to-dash:hover{
     color: #505050;
-    
 }
 
 .back-to-dash p{
