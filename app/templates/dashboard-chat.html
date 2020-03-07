@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/dashboard.css">
+<script>
+    $(document).on('click', '.close-flash', function(){
+        parent = $(this).parent().remove();
+    });
+</script>
+<div class="dash-wrapper">
+    <div class="dash-side">
+        <a href="/dashboard/teams/"><div class="dash-side-item">
+            <img src="/static/images/icons/teams.png">
+        </div></a>
+        <a href="/dashboard/chat/"><div class="dash-side-item active">
+            <img src="/static/images/icons/chat.png">
+        </div></a>
+        <a href="/dashboard/tasks/"><div class="dash-side-item">
+            <img src="/static/images/icons/tasks.png">
+        </div></a>
+    </div>
+    <div class="dash-right">
+        <h1>Under development</h1>
+    </div>
+</div>
+
+{% endblock %}

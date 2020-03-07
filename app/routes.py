@@ -72,8 +72,13 @@ def dashboard():
 
 @app.route('/dashboard/chat/')
 @login_required
-def chat():
+def dashboard_chat():
     return render_template('dashboard-chat.html', title="Chat");
+
+@app.route('/dashboard/tasks/')
+@login_required
+def dashboard_tasks():
+    return render_template('dashboard-tasks.html', title="Tasks");
 
 @app.route('/team/create/', methods=['GET', 'POST'])
 @login_required
