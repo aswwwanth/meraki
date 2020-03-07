@@ -34,7 +34,3 @@ class CreateTeam(FlaskForm):
 class JoinTeam(FlaskForm):
     tcode = StringField('Team Code', validators=[DataRequired()], render_kw={"placeholder": "Team Code"})
     submit = SubmitField('Join team')
-
-class AddMember(FlaskForm):
-    mid = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
-    submit = SubmitField('Add member', render_kw={"disabled": ""})

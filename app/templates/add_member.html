@@ -13,7 +13,7 @@
         search = $('#mid').val();
         // console.log("Value = " + search);
         if(search != ''){
-            url = "/users/search/" + search + "/";
+            url = "/users/search?user=" + search + "&team={{ team.id }}";
             $.ajax({
                 type: "GET",
                 url: url,

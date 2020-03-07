@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam, AddMember
+from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
 from app.models import User, Team, TeamMember
 import math, random
 
@@ -139,7 +139,6 @@ def view_team(tcode):
 def add_team_member(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.id == team.tadmin:
-        form = AddMember()
         if request.method == 'POST':
             user_list = request.form.getlist('users[]')
             for uid in user_list:
@@ -153,7 +152,7 @@ def add_team_member(tcode):
                     db.session.add(member)
                     db.session.commit()
             return jsonify(data={'status': 200})
-        return render_template('add_member.html', form=form, team=team)
+        return render_template('add_member.html', team=team)
     else:
         return "Access denied."
 
@@ -169,19 +168,34 @@ def delete_team(tcode):
     else:
         return "Access denied."
 
-@app.route('/users/search/<nlike>/', methods=['GET', 'POST'])
+@app.route('/users/search', methods=['GET', 'POST'])
 @login_required
-def search_user(nlike):
-    search = "%" + nlike + "%"
-    user = User.query.filter(User.username.like(search)).all()
+def search_user():
     responseObject = []
-    for u in user:
-        responseObject.append({
-            'uid': u.id,
-            'username': u.username,
-            'fname': u.fname,
-            'lname': u.lname,
-            'email': u.email
-        })
+    user = request.args.get('user')
+    team = request.args.get('team')
+    # print(user, team)
+    search = "%" + user + "%"
+    user = User.query.filter(User.username.like(search)).all()
+    if team is None:
+        for u in user:
+            responseObject.append({
+                'uid': u.id,
+                'username': u.username,
+                'fname': u.fname,
+                'lname': u.lname,
+                'email': u.email
+            })
+    else:
+        for u in user:
+            check_team = TeamMember.query.filter_by(tid=team, mid=u.id).first()
+            if check_team is None:
+                responseObject.append({
+                    'uid': u.id,
+                    'username': u.username,
+                    'fname': u.fname,
+                    'lname': u.lname,
+                    'email': u.email
+                })
+
     return jsonify(responseObject)
-    
