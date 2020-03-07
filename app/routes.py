@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, redirect, url_for, request, flash, jsonify
+from flask import render_template, flash, redirect, url_for, request, flash, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
 from app.models import User, Team, TeamMember
@@ -162,8 +162,13 @@ def delete_team(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.id == team.tadmin:
         if request.method == 'POST':
-
-            return jsonify(data={'status': 200})
+            team = Team.query.filter_by(tcode=tcode).first()
+            TeamMember.query.filter_by(tid=team.id).delete()
+            Team.query.filter_by(id=team.id).delete()
+            db.session.commit()
+            message = "Team " + team.tname + " is successfully deleted and all the data associated with it was removed from our system."
+            flash(message)
+            return redirect(url_for('dashboard'))
         return render_template('delete_team.html', team=team)
     else:
         return "Access denied."

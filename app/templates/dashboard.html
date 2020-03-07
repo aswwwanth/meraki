@@ -3,8 +3,28 @@
 {% block content %}
 
 <link rel="stylesheet" href="/static/css/dashboard.css">
+<script>
+    $(document).on('click', '.close-flash', function(){
+        parent = $(this).parent().remove();
+    });
+</script>
 <div class="container">
     <h1>Hello {{ user.fname }}!</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash-notifications" id = "{{ message }}">
+            <div class="flash-message">
+                {{ message }}
+            </div>
+            <div class="close-flash">  
+                <img src="/static/images/icons/close.png" height="15px">
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <br>
     <div class="team-head">
         <div class="team-head-left">

@@ -27,7 +27,7 @@ body{
 }
 
 .teams-view{
-    margin-top: 90px;
+    margin-top: 60px;
     margin-right: 50px;
     height: 100%;
     width: 95%;
@@ -49,5 +49,30 @@ body{
 
 .team-card:hover{
     background-color:f3f2f1;
+    cursor: pointer;
+}
+
+.flash-notifications{
+    width: 97.5%;
+    margin-top: 10px;
+    height: 60px;
+    background: lightgreen;
+    display: grid;
+    grid-template-columns: 98% 2%;
+    grid-template-areas: 'message close';
+}
+
+.close-flash, .flash-message{
+    display: flex;
+    align-items: center;
+}
+
+.flash-message{
+    padding: 20px;
+    grid-area: message;
+}
+
+.close-flash{
+    grid-area: close;
     cursor: pointer;
 }
