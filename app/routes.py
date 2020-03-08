@@ -199,14 +199,20 @@ def team_tasks(tcode):
 @app.route('/team/<tcode>/members/')
 @login_required
 def team_members(tcode):
+    
     team = Team.query.filter_by(tcode=tcode).first()
-    boolAdmin = False;
-    if current_user.id == team.tadmin:
-        boolAdmin = True;
-    return render_template('tabs/members-tab.html', checkAdmin=boolAdmin, team=team)
+
+    get_ids = TeamMember.query.filter_by(tid=team.id).all()
+    user_list = []
+    for u in get_ids:
+        user_list.append(u.mid)
+
+    get_details = User.query.filter(User.id.in_(user_list)).all()
+    
+    return render_template('tabs/members-tab.html', team=team, members=get_details)
 
 
-@app.route('/users/search', methods=['GET', 'POST'])
+@app.route('/users/search', methods=['GET'])
 @login_required
 def search_user():
     responseObject = []
@@ -237,3 +243,32 @@ def search_user():
                 })
 
     return jsonify(responseObject)
+
+@app.route('/members', methods=['GET'])
+@login_required
+def get_members():
+    
+    responseObject = []
+    team = request.args.get('team')
+    team = Team.query.filter_by(tcode=team).first()
+    if team is None:
+        return jsonify(data={'message' : 'Team not found'})
+
+    get_ids = TeamMember.query.filter_by(tid=team.id).all()
+    user_list = []
+    for u in get_ids:
+        user_list.append(u.mid)
+
+    get_details = User.query.filter(User.id.in_(user_list)).all()
+    
+    for e in get_details:
+        responseObject.append({
+            'uid': e.id,
+            'username': e.username,
+            'fname': e.fname,
+            'lname': e.lname,
+            'email': e.email
+        })
+
+    return jsonify(responseObject)
+

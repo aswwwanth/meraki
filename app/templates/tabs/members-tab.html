@@ -8,8 +8,74 @@
         $('.members-tab').addClass('active');
     });
 </script>
-<div style="padding: 50px;">
-    <h2>Under development</h2>
+<style>
+    .members-tab-wrapper{
+        padding: 30px;
+    }
+    .list-members{
+        margin-top: 20px;
+    }
+    .member{
+        display: grid;
+        width: 500px;
+        height: 70px;
+        grid-template-columns: 60px auto 60px;
+        grid-template-areas: 'img details close';
+    }
+    .member:hover{
+        background: #e3e3e3;
+    }
+    .member-close{
+        grid-area: close;
+    }
+    .member-close img{
+        height: 15px;
+    }
+    .member-close:hover{
+        cursor: pointer;
+    }
+    .member-img{
+        grid-area: img;
+    }
+    .member-img img{
+        height: 40px;
+    }
+    .member-details{
+        grid-area: details;
+    }
+    .member-details{
+        display: flex;
+        align-items: center;
+    }
+    .member-close, .member-img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .member-details span{
+        font-weight: normal;
+    }
+</style>
+<div class="members-tab-wrapper">
+    <h2>Team Members</h2>
+    <div class="list-members">
+        {% for m in members %}
+        <div class="member">
+            <div class="member-close">
+                <img src="/static/images/icons/close.png">
+            </div>
+            <div class="member-img">
+                <img src="/static/images/icons/user.png">
+            </div>
+            <div class="member-details">
+                <div>
+                    <h3>{{ m.fname}} {{ m.lname }}<span> (@{{ m.username }})</span></h3>
+                    <p>{{ m.email }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
