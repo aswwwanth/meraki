@@ -41,7 +41,7 @@ body{
     height: 100%;
     width: 100%;
     grid-area: teams;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 .team-head{
@@ -65,7 +65,6 @@ body{
 .team-head-right{
     grid-area: rt;
     justify-content: flex-end;
-    /* margin-right: 120px; */
 }
 
 .teams-view{
