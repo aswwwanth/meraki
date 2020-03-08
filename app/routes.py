@@ -136,15 +136,6 @@ def join_team():
     
     return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
-@app.route('/team/<tcode>/')
-@login_required
-def view_team(tcode):
-    team = Team.query.filter_by(tcode=tcode).first()
-    boolAdmin = False;
-    if current_user.id == team.tadmin:
-        boolAdmin = True;
-    return render_template('team.html', checkAdmin=boolAdmin, team=team)
-
 @app.route('/team/add/<tcode>/', methods=['GET', 'POST'])
 @login_required
 def add_team_member(tcode):
@@ -183,6 +174,37 @@ def delete_team(tcode):
         return render_template('delete_team.html', team=team)
     else:
         return "Access denied."
+
+@app.route('/team/<tcode>/')
+@app.route('/team/<tcode>/chat/')
+@login_required
+def team_chat(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    boolAdmin = False;
+    if current_user.id == team.tadmin:
+        boolAdmin = True;
+    return render_template('tabs/chat-tab.html', checkAdmin=boolAdmin, team=team)
+
+@app.route('/team/<tcode>/')
+@app.route('/team/<tcode>/tasks/')
+@login_required
+def team_tasks(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    boolAdmin = False;
+    if current_user.id == team.tadmin:
+        boolAdmin = True;
+    return render_template('tabs/tasks-tab.html', checkAdmin=boolAdmin, team=team)
+
+@app.route('/team/<tcode>/')
+@app.route('/team/<tcode>/members/')
+@login_required
+def team_members(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    boolAdmin = False;
+    if current_user.id == team.tadmin:
+        boolAdmin = True;
+    return render_template('tabs/members-tab.html', checkAdmin=boolAdmin, team=team)
+
 
 @app.route('/users/search', methods=['GET', 'POST'])
 @login_required

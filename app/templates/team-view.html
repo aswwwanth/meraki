@@ -75,19 +75,14 @@
             <div>
                 <h3>{{ team.tname }} channel </h3>
             </div>
-            <div style="margin-left: 10px;">
-                <div>
-                    <p class="chat-tab active">Chat</p>
-                </div>
-                <div>
-                    <p class="tasks-tab">Tasks</p>
-                </div>
-                <div>
-                    <p class="members-tab">Members</p>
-                </div>
+            <div class="tabs" style="margin-left: 10px;">
+                <a href="/team/{{ team.tcode }}/chat/"><div><p class="chat-tab">Chat</p></div></a>
+                <a href="/team/{{ team.tcode }}/tasks/"><div><p class="tasks-tab">Tasks</p></div></a>
+                <a href="/team/{{ team.tcode }}/members/"><div><p class="members-tab">Members</p></div></a>
             </div>
         </div>
         <div class="team-channel-body">
+            {% block righttab %}{% endblock %}
         </div>
     </div>
 </div>
