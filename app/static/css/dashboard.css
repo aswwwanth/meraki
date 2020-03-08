@@ -38,8 +38,10 @@ body{
     height: 23px;
 }
 .dash-right{
+    height: 100%;
+    width: 100%;
     grid-area: teams;
-    margin: 50px;
+    overflow: hidden;
 }
 
 .team-head{
@@ -70,11 +72,10 @@ body{
     margin-top: 20px;
     height: 100%;
     width: 100%;
-    position: fixed;
     display: grid;
     grid-gap: 25px;
     grid-auto-rows: min-content;
-    grid-template-columns: auto auto auto auto auto;
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .team-card{
@@ -93,18 +94,22 @@ body{
 
 .flash-notifications{
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
     box-sizing: content-box;
     background: lightgreen;
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: auto 50px;
     grid-template-areas: 'message close';
 }
 
 .close-flash, .flash-message{
     display: flex;
-    padding: 20px;
+    padding: 12px;
     align-items: center;
+}
+
+.close-flash img{
+    height: 10px;
 }
 
 .flash-message{

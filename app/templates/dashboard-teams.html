@@ -39,8 +39,17 @@
 
     });
 </script>
+<style>
+    .team-dash-wrapper{
+        height: 100%;
+        width: 100%;
+        padding: 50px;
+        overflow-y: scroll;
+    }
+</style>
 <div class="pop-up" style="width: 500px" heigh="350px;"></div>
-<h1>Hello {{ user.fname }}!</h1>
+<div class="team-dash-wrapper">
+    <h1>Hello {{ user.fname }}!</h1>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
@@ -49,7 +58,7 @@
                 {{ message }}
             </div>
             <div class="close-flash">  
-                <img src="/static/images/icons/close.png" height="15px">
+                <img src="/static/images/icons/close.png">
             </div>
         </div>
         {% endfor %}

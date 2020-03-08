@@ -1,11 +1,11 @@
 .dash-right{
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 .team-details{
     height: 100%;
     width: 100%;
-    position: fixed;
     display: grid;
     grid-template-columns: 20% 80%;
     grid-template-areas: "lt rt";
@@ -23,6 +23,7 @@
 
 .team-details-right{
     grid-area: rt;
+    overflow: hidden;
     display: grid;
     grid-template-rows: 60px auto;
     grid-template-areas:
@@ -67,7 +68,10 @@
 }
 
 .team-channel-body{
+    height: 100%;
+    width: 100%;
     grid-area: body;
+    overflow-y: scroll;
 }
 
 .back-to-dash{

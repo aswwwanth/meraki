@@ -29,6 +29,7 @@
 <style>
     .members-tab-wrapper{
         padding: 30px;
+        width: 100%;
     }
     .list-members{
         margin-top: 20px;
@@ -79,10 +80,30 @@
         color: #fff;
         background: #32a852;
     }
+    .flash-notifications{
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
 </style>
 <div class="members-tab-wrapper">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash-notifications">
+            <div class="flash-message">
+                {{ message }}
+            </div>
+            <div class="close-flash">  
+                <img src="/static/images/icons/close.png">
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h2>Team Members</h2>
     <div class="list-members">
+        {% for o in members %}
+        {% for l in members %}
         {% for m in members %}
         <div class="member" id="{{ m.id }} {{ m.username }}">
             {% if admin_id == current_user.id and m.id != admin_id %}
@@ -100,6 +121,8 @@
                 </div>
             </div>
         </div>
+        {% endfor %}
+        {% endfor %}
         {% endfor %}
     </div>
 </div>

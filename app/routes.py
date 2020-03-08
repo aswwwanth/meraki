@@ -122,7 +122,7 @@ def create_team():
             )
             db.session.add(member)
             db.session.commit()
-
+            flash("Team " + form.tname.data + " successfully created ")
             return render_template('success_team.html', tcode=team_code)
         return jsonify(data=form.errors)
 
@@ -170,6 +170,8 @@ def add_team_member(tcode):
                     )
                     db.session.add(member)
                     db.session.commit()
+
+            flash("Successfully added")
             return jsonify(data={'status': 200})
         return render_template('add_member.html', team=team)
     else:
@@ -186,6 +188,7 @@ def remove_team_member():
         if member is not None:
             TeamMember.query.filter_by(mid=user, tid=team.id).delete()
             db.session.commit()
+            flash("User successfully removed.")
         return redirect('/team/' + team.tcode + '/members/')
     else:
         return jsonify(data={'message': 'Access denied.'})
