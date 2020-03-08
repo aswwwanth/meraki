@@ -129,7 +129,7 @@ def join_team():
             )
             db.session.add(member)
             db.session.commit()
-
+            flash("You have successfully joined the team " + team.tname)
             print(team)
             return jsonify(data={'status': 200}) 
         return jsonify(data=form.errors) 
