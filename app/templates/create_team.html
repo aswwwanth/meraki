@@ -1,40 +1,44 @@
-{% extends "base.html" %}
-
-{% block content %}
-
 <script>
-    $(document).ready(function() {
-        $('form').submit(function (e) {
-            var url = "{{ url_for('create_team') }}";
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $('form').serialize(),
-                success: function (data) {
-                    if(!data.hasOwnProperty('data'))
-                        $(".st-form-container").html(data);
-                    else if(data.hasOwnProperty('data')){
-                        $(".st-form-errors span").html(data.data['tname']);
-                        $(".st-form-errors").css('display', 'block');
-                    }
-                }
-            });
-            e.preventDefault();
-        });
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+    $(document).on('submit', 'form', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('create_team') }}",
+            data: $('form').serialize(),
+            success: function (data) {
+                if(!data.hasOwnProperty('data'))
+                    $(".st-form-container").html(data);
+                else if(data.hasOwnProperty('data')){
+                    $(".st-form-errors span").html(data.data['tname']);
+                    $(".st-form-errors").css('display', 'block');
                 }
             }
-        })
+        });
     }); 
-</script>
 
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+            }
+        }
+    })
+
+    $(document).on('click', '.cancel-create', function(){
+        $('.pop-up').css('display', 'none');
+        $('.pop-up').css('height', '350');
+        $('.pop-up').html('');
+        $('#page-mask').css('display', 'none');
+    });
+</script>
+<style>
+    .create input[type="submit"], .create input[type="button"]{
+        width: 170px;
+    }
+</style>
 <div class="st-form-container">
 
-    <div class="st-form">
+    <div class="st-form create">
 
         <h1>Create Team</h1>
         <p>Please provide the following details for your team.</p>
@@ -47,11 +51,11 @@
             <div class="st-form-field textarea">
                 {{ form.tdesc }}
             </div>
-            <p>{{ form.submit }}</p>
+            <p>{{ form.submit }}
+            <input style="margin-left: 10px;" type="button" value="Cancel" class="cancel-create">
+            </p>
         </form>
     
     </div>
 
 </div>
-
-{% endblock %}

@@ -173,10 +173,10 @@ def delete_team(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.id == team.tadmin:
         if request.method == 'POST':
-            # team = Team.query.filter_by(tcode=tcode).first()
-            # TeamMember.query.filter_by(tid=team.id).delete()
-            # Team.query.filter_by(id=team.id).delete()
-            # db.session.commit()
+            team = Team.query.filter_by(tcode=tcode).first()
+            TeamMember.query.filter_by(tid=team.id).delete()
+            Team.query.filter_by(id=team.id).delete()
+            db.session.commit()
             message = "Team " + team.tname + " is successfully deleted and all the data associated with it was removed from our system."
             flash(message)
             return redirect(url_for('dashboard'))
