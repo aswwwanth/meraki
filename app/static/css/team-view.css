@@ -40,7 +40,8 @@
 }
 
 .team-channel-head div{
-    margin-right: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
     height: 100%;
     display: flex;
     align-items: center;

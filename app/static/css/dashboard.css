@@ -35,7 +35,7 @@ body{
 }
 
 .dash-side-item img{
-    height: 28px;
+    height: 23px;
 }
 .dash-right{
     grid-area: teams;
