@@ -6,6 +6,7 @@ body{
     height: 100%;
     width: 100%;
     padding-top: 60px;
+    /* overflow: hidden; */
     display: grid;
     grid-template-columns: 3% 97%; 
     grid-template-areas: 'side teams';
@@ -68,7 +69,7 @@ body{
 
 .teams-view{
     padding-top: 20px;
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     display: grid;
     grid-gap: 25px;
