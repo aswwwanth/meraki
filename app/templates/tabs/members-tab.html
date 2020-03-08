@@ -102,8 +102,6 @@
     {% endwith %}
     <h2>Team Members</h2>
     <div class="list-members">
-        {% for o in members %}
-        {% for l in members %}
         {% for m in members %}
         <div class="member" id="{{ m.id }} {{ m.username }}">
             {% if admin_id == current_user.id and m.id != admin_id %}
@@ -121,8 +119,6 @@
                 </div>
             </div>
         </div>
-        {% endfor %}
-        {% endfor %}
         {% endfor %}
     </div>
 </div>
