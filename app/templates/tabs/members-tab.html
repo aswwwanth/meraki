@@ -6,6 +6,24 @@
     $(document).ready(function(){
         $('.tabs p').removeClass('active');
         $('.members-tab').addClass('active');
+        
+        $('.member-close').click(function(){
+            var d = $(this).parent().attr('id').split(" ");
+            $('#page-mask').css('display', 'block');
+            $('.pop-up').css('width', '560px');
+            $('.pop-up').css('height', '250px');
+            html = '<div class="delete-team"style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to remove <b>@'+ d[1] +'</b> from the team?</p><form action="/team/remove?team={{ team.id }}&user='+ d[0] +'" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-remove" value="Cancel"></form></div>'
+            $('.pop-up').html(html);
+            $('.cancel-remove').click(function(e){
+                e.preventDefault();
+                $('.pop-up').css('display', 'none');
+                $('.pop-up').html('');
+                $('.pop-up').css('width', '650px');
+                $('.pop-up').css('height', '300px');
+                $('#page-mask').css('display', 'none'); 
+            });
+            $('.pop-up').css('display', 'block');
+        });
     });
 </script>
 <style>
@@ -66,7 +84,7 @@
     <h2>Team Members</h2>
     <div class="list-members">
         {% for m in members %}
-        <div class="member">
+        <div class="member" id="{{ m.id }} {{ m.username }}">
             {% if admin_id == current_user.id and m.id != admin_id %}
             <div class="member-close">
                 <img src="/static/images/icons/close.png">

@@ -68,10 +68,7 @@
                 if(data.data['status'] == 200){
                     $('.pop-up').html("<div style=\"width: 100%; height: 550px; display: flex; justify-content: center; align-items: center;\"><center><div><img src=\"/static/images/icons/tick.png\" height=\"100px\"><h2 style=\"margin-top: 10px;\">Added successfully</h2><input type=\"submit\" value=\"Close\" style=\"margin-top: 10px;\" class=\"close-popup\"></center></diV>")
                     $('.close-popup').click(function(){
-                        $('.pop-up').css('display', 'none');
-                        $('.pop-up').html('');
-                        $('.pop-up').css('height', '300px');
-                        $('#page-mask').css('display', 'none'); 
+                        window.location = '/team/{{ team.tcode }}/members/'; 
                     });
                 }
             }

@@ -173,7 +173,22 @@ def add_team_member(tcode):
             return jsonify(data={'status': 200})
         return render_template('add_member.html', team=team)
     else:
-        return "Access denied."
+        return jsonify(data={'message': 'Access denied.'})
+
+@app.route('/team/remove', methods=['POST'])
+@login_required
+def remove_team_member():
+    team = request.args.get('team')
+    user = request.args.get('user')
+    team = Team.query.filter_by(id=team).first()
+    if current_user.id == team.tadmin:
+        member = TeamMember.query.filter_by(mid=user, tid=team.id).first()
+        if member is not None:
+            TeamMember.query.filter_by(mid=user, tid=team.id).delete()
+            db.session.commit()
+        return redirect('/team/' + team.tcode + '/members/')
+    else:
+        return jsonify(data={'message': 'Access denied.'})
 
 @app.route('/team/delete/<tcode>/', methods=['GET', 'POST'])
 @login_required
@@ -190,7 +205,7 @@ def delete_team(tcode):
             return redirect(url_for('dashboard'))
         return render_template('delete_team.html', team=team)
     else:
-        return "Access denied."
+        return jsonify(data={'message': 'Access denied.'})
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/chat/')
