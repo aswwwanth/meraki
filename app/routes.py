@@ -153,6 +153,19 @@ def join_team():
     
     return render_template('join_team.html', title="Join team", user=current_user, form=form)
 
+@app.route('/team/leave/<tcode>/', methods=['GET', 'POST'])
+@login_required
+@is_member()
+def leave_team(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    if current_user.id == team.tadmin:
+        return jsonify(data={'message': 'You cant leave the team, you are the admin!!!'})
+
+    TeamMember.query.filter_by(mid=current_user.id, tid=team.id).delete()
+    db.session.commit()
+    flash("Successfully left team " + team.tname)
+    return redirect(url_for('dashboard'))
+
 @app.route('/team/add/<tcode>/', methods=['GET', 'POST'])
 @login_required
 def add_team_member(tcode):
@@ -163,7 +176,6 @@ def add_team_member(tcode):
             for uid in user_list:
                 check_user = TeamMember.query.filter_by(mid=uid,tid=team.id).first()
                 if check_user is None:
-                    # print(request.form.get('team'))
                     member = TeamMember(
                         tid = request.form.get('team'),
                         mid = uid

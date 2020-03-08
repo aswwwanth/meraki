@@ -35,6 +35,22 @@
             $('.pop-up').css('display', 'block');
         });
 
+        $('.leave-team').click(function(){
+            $('#page-mask').css('display', 'block');
+            $('.pop-up').css('width', '560px');
+            $('.pop-up').css('height', '250px');
+            html = '<div class="leave-team" style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to leave the team {{ team.tname }} ?</p><form action="/team/leave/{{team.tcode}}/" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-leave" value="Cancel"></form></div>'
+            $('.pop-up').html(html);
+            $('.cancel-leave').click(function(e){
+                e.preventDefault();
+                $('.pop-up').css('display', 'none');
+                $('.pop-up').html('');
+                $('.pop-up').css('width', '650px');
+                $('.pop-up').css('height', '300px');
+                $('#page-mask').css('display', 'none'); 
+            });
+            $('.pop-up').css('display', 'block');
+        });
     });
 </script>
 <div class="pop-up" style="width: 650px"></div>
@@ -57,7 +73,7 @@
             <div style="margin-top: 20px; float: left;">
                 <center>
                     {% if admin_id != current_user.id %}
-                    <input type="submit" value="Leave team">
+                    <input type="submit" value="Leave team" class="leave-team">
                     {% else %}
                     <input type="submit" class ="add-member" value="Add Member" style="width: 120px; margin-right: 10px;">
                     <input type="submit" class ="delete-team" value="Delete Team" style="width: 120px">
