@@ -201,6 +201,9 @@ def team_tasks(tcode):
 def team_members(tcode):
     
     team = Team.query.filter_by(tcode=tcode).first()
+    boolAdmin = False;
+    if current_user.id == team.tadmin:
+        boolAdmin = True;
 
     get_ids = TeamMember.query.filter_by(tid=team.id).all()
     user_list = []
@@ -209,7 +212,7 @@ def team_members(tcode):
 
     get_details = User.query.filter(User.id.in_(user_list)).all()
     
-    return render_template('tabs/members-tab.html', team=team, members=get_details)
+    return render_template('tabs/members-tab.html',checkAdmin=boolAdmin, team=team, members=get_details)
 
 
 @app.route('/users/search', methods=['GET'])
