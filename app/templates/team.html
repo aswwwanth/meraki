@@ -54,12 +54,12 @@
                 <div>
                     <a href="/dashboard/">
                     <div class="back-to-dash">
-                        <img src="\static\images\icons\back1.png" height="10px">
+                        <img src="/static/images/icons/back.png" height="10px">
                         <p>All teams</p>
                     </div>
                     </a>
                     <center>
-                        <img src="\static\images\teamwork.png" height="100px">
+                        <img src="/static/images/icons/teamwork.png" height="100px">
                         <h1 style="margin-top: 10px;">{{ team.tname }}</h1>
                     </center>
                     <div style="margin-top: 20px">
@@ -80,7 +80,23 @@
             </div>
             <div class="team-details-right">
                 <div class="team-channel-head">
-                    <h3>{{ team.tname }} channel </h3>    
+                    <div>
+                        <img src="/static/images/icons/teamwork.png" height="30px">
+                    </div>
+                    <div>
+                        <h3>{{ team.tname }} channel </h3>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div>
+                            <p class="post-tab active">Posts</p>
+                        </div>
+                        <div>
+                            <p class="tasks-tab">Tasks</p>
+                        </div>
+                        <div>
+                            <p class="members-tab">Members</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="team-channel-body">
                 </div>

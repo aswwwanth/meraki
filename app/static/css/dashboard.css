@@ -22,6 +22,7 @@ body{
     align-items: center;
     padding-top: 15px;
     padding-bottom: 15px;
+    border-left: 3px solid transparent;
 }
 
 .dash-side-item:hover{
