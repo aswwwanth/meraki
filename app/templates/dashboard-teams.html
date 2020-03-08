@@ -41,45 +41,50 @@
 </script>
 <style>
     .team-dash-wrapper{
-        height: inherit;
+        height: 100%;
         width: 100%;
-        padding: 50px;
         overflow-y: scroll;
+    }
+    .team-dash-content{
+        padding: 50px;
+        height: 100%;
     }
 </style>
 <div class="pop-up" style="width: 500px" heigh="350px;"></div>
 <div class="team-dash-wrapper">
-    <h1>Hello {{ user.fname }}!</h1>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="flash-notifications">
-            <div class="flash-message">
-                {{ message }}
+    <div class="team-dash-content">
+        <h1>Hello {{ user.fname }}!</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="flash-notifications">
+                <div class="flash-message">
+                    {{ message }}
+                </div>
+                <div class="close-flash">  
+                    <img src="/static/images/icons/close.png">
+                </div>
             </div>
-            <div class="close-flash">  
-                <img src="/static/images/icons/close.png">
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <br>
-    <div class="team-head">
-        <div class="team-head-left">
-            <h2>Your teams</h2>
-        </div>
-        <div class="team-head-right">
-            <input type="submit" class="join-team" value="Join team" style="margin-right: 15px;">
-            <input type="submit" value="Create team" class="create-team">
-        </div>
-    </div>
-    <div class="teams-view">
-        {% if teams %}
-            {% for item in teams %}
-                <a href="/team/{{ item.Team.tcode }}/""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
             {% endfor %}
-        {% endif %}
+            {% endif %}
+        {% endwith %}
+        <br>
+        <div class="team-head">
+            <div class="team-head-left">
+                <h2>Your teams</h2>
+            </div>
+            <div class="team-head-right">
+                <input type="submit" class="join-team" value="Join team" style="margin-right: 15px;">
+                <input type="submit" value="Create team" class="create-team">
+            </div>
+        </div>
+        <div class="teams-view">
+            {% if teams %}
+                {% for item in teams %}
+                    <a href="/team/{{ item.Team.tcode }}/""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 </div>
 

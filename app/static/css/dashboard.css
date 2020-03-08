@@ -38,7 +38,6 @@ body{
     height: 23px;
 }
 .dash-right{
-    height: 100%;
     width: 100%;
     grid-area: teams;
     overflow-y: hidden;
@@ -68,7 +67,7 @@ body{
 }
 
 .teams-view{
-    margin-top: 20px;
+    padding-top: 20px;
     height: 100%;
     width: 100%;
     display: grid;
