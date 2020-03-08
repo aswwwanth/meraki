@@ -1,5 +1,6 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request, flash, jsonify
+from functools import wraps
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
 from app.models import User, Team, TeamMember
@@ -12,6 +13,22 @@ def generateCode():
 	for i in range(6):
 		OTP += string[math.floor(random.random() * length)] 
 	return OTP  
+
+def is_member():
+    def is_member_wrap(func):    
+        @wraps(func)
+        def d_view(tcode, *args, **kwargs):
+            team = Team.query.filter_by(tcode=tcode).first()
+            members = TeamMember.query.filter_by(tid=team.id).all()
+            user_list = []
+            for m in members:
+                user_list.append(m.mid)
+            if current_user.id in user_list:
+                return func(tcode, *args, **kwargs)
+            flash('You are not a part of the team.')
+            return redirect(url_for('dashboard'))
+        return d_view
+    return is_member_wrap
 
 @app.route('/')
 def home():
@@ -178,32 +195,29 @@ def delete_team(tcode):
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/chat/')
 @login_required
+@is_member()
 def team_chat(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    boolAdmin = False;
-    if current_user.id == team.tadmin:
-        boolAdmin = True;
-    return render_template('tabs/chat-tab.html', checkAdmin=boolAdmin, team=team)
+    admin_id = team.tadmin;
+    return render_template('tabs/chat-tab.html', admin_id=admin_id, team=team)
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/tasks/')
 @login_required
+@is_member()
 def team_tasks(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    boolAdmin = False;
-    if current_user.id == team.tadmin:
-        boolAdmin = True;
-    return render_template('tabs/tasks-tab.html', checkAdmin=boolAdmin, team=team)
+    admin_id = team.tadmin;
+    return render_template('tabs/tasks-tab.html', admin_id=admin_id, team=team)
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/members/')
 @login_required
+@is_member()
 def team_members(tcode):
     
     team = Team.query.filter_by(tcode=tcode).first()
-    boolAdmin = False;
-    if current_user.id == team.tadmin:
-        boolAdmin = True;
+    admin_id = team.tadmin;
 
     get_ids = TeamMember.query.filter_by(tid=team.id).all()
     user_list = []
@@ -212,7 +226,7 @@ def team_members(tcode):
 
     get_details = User.query.filter(User.id.in_(user_list)).all()
     
-    return render_template('tabs/members-tab.html',checkAdmin=boolAdmin, team=team, members=get_details)
+    return render_template('tabs/members-tab.html',admin_id=admin_id, team=team, members=get_details)
 
 
 @app.route('/users/search', methods=['GET'])

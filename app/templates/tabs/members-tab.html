@@ -55,21 +55,29 @@
     .member-details span{
         font-weight: normal;
     }
+    .member-details .admin-highlight{
+        padding: 1px 10px;
+        font-size: 13px;
+        color: #fff;
+        background: #32a852;
+    }
 </style>
 <div class="members-tab-wrapper">
     <h2>Team Members</h2>
     <div class="list-members">
         {% for m in members %}
         <div class="member">
+            {% if admin_id == current_user.id and m.id != admin_id %}
             <div class="member-close">
                 <img src="/static/images/icons/close.png">
             </div>
+            {% endif %}
             <div class="member-img">
                 <img src="/static/images/icons/user.png">
             </div>
             <div class="member-details">
                 <div>
-                    <h3>{{ m.fname}} {{ m.lname }}<span> (@{{ m.username }})</span></h3>
+                    <h3>{{ m.fname}} {{ m.lname }} <span> (@{{ m.username }})</span> {% if admin_id == m.id %}<span class="admin-highlight">Admin</span>{% endif %}</h3>
                     <p>{{ m.email }}</p>
                 </div>
             </div>
