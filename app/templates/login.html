@@ -36,7 +36,17 @@
 <div class="st-form-container">
 
     <div class="st-form">
-
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="flash-notifications" style="margin-bottom: 10px;">
+                <div class="flash-message">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
         <h1>Sign In</h1>
         <p>Please sign in to your account to continue</p>
         <form action="" method="post" novalidate autocomplete="off">
