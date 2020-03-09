@@ -43,7 +43,7 @@ def register():
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data.lower()).first()
             if user is not None:
-                return jsonify(data={'username', 'Username already exists.'})
+                return jsonify(data={'username': 'Username already exists.'})
             user = User( 
                 email=form.email.data.lower(), 
                 fname=form.fname.data,
