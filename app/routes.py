@@ -2,17 +2,12 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request, flash, jsonify
 from functools import wraps
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import RegistrationForm, LoginForm, CreateTeam, JoinTeam
-from app.models import User, Team, TeamMember
-import math, random
+from app.forms import *
+from app.models import *
+import math, random, uuid
 
 def generateCode():
-	string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	OTP = "" 
-	length = len(string)
-	for i in range(6):
-		OTP += string[math.floor(random.random() * length)] 
-	return OTP  
+	return uuid.uuid4().hex
 
 def is_member():
     def is_member_wrap(func):    
@@ -42,8 +37,6 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data.lower()).first()
-            if user is not None:
-                return jsonify(data={'username':'Username already exists.'})
             user = User( 
                 email=form.email.data.lower(), 
                 fname=form.fname.data,
@@ -68,10 +61,10 @@ def login():
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data.lower()).first()
             if user is None or not user.check_password(form.password.data):
-                return jsonify(data={'error': 'Invalid username or Password'})
+                return jsonify(data={'error': 'Invalid username or password'})
             login_user(user)
             return jsonify(data={'status': 200})
-        return jsonify(data={'error': 'Both username and password is required.'})
+        return jsonify(data={'error': 'Both username and password are required'})
     
     return render_template('login.html', title="Login", form=form)
  
@@ -189,7 +182,7 @@ def add_team_member(tcode):
     else:
         return jsonify(data={'message': 'Access denied.'})
 
-@app.route('/team/remove', methods=['POST'])
+@app.route('/team/remove/', methods=['POST'])
 @login_required
 def remove_team_member():
     team = request.args.get('team')
@@ -259,7 +252,7 @@ def team_members(tcode):
     return render_template('tabs/members-tab.html',admin_id=admin_id, team=team, members=get_details)
 
 
-@app.route('/users/search', methods=['GET'])
+@app.route('/users/search/', methods=['GET'])
 @login_required
 def search_user():
     responseObject = []
@@ -291,7 +284,7 @@ def search_user():
 
     return jsonify(responseObject)
 
-@app.route('/members', methods=['GET'])
+@app.route('/members/', methods=['GET'])
 @login_required
 def get_members():
     
@@ -318,7 +311,3 @@ def get_members():
         })
 
     return jsonify(responseObject)
-
-@app.route('/test')
-def test():
-    return "hello";

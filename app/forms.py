@@ -16,10 +16,16 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Email already registered')
 
-    def validate_password(self,password):
-    	if len(password.data) < 8 and len(password.data) >16:
-    		raise ValidationError('Please keep a password with length between 8 and 16 characters')
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Username already exists')
 
+    def validate_password(self,password):
+        if len(password.data) < 8:
+            raise ValidationError('Password should be atleast 8 characters long')
+        elif len(password.data) > 16:
+            raise ValidationError('Password should not be more than 16 characters long')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})

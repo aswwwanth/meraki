@@ -6,11 +6,184 @@
     $(document).ready(function(){
         $('.tabs p').removeClass('active');
         $('.chat-tab').addClass('active');
+
+        var socket = io.connect('http://localhost:5000');
+        
+        socket.emit('join_team_channel', {'room': '{{ team.id }}'});
+
+        socket.on('general', function(message) {
+            console.log(message);
+        });
+
+        $('#send-message').click(function(e){
+            e.preventDefault();
+            console.log("Sending message");
+            socket.emit('team_message', {'message': $('#message-field').val(), 'room': '{{ team.id }}'});
+            $('#message-field').val('');
+        });
+
+        socket.on('team_message', function(data){
+            // console.log(data);
+            var message_processed;
+            if(data.username == '{{ current_user.username }}')
+                message_processed = `<div class="message right-message"><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
+            else
+                message_processed = `<div class="message left-message"><div class="message-profile"><img src="/static/images/icons/user.png"></div><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
+            $('.chat-messages').append(message_processed);
+        });
+
+        $(".chat-body").scroll(function() {
+            if($(this).scrollTop() + $(this).innerHeight() + 5 < $(this)[0].scrollHeight) {
+                // console.log("Show border");
+                // $('.chat-footer').css('border-top', '2px solid #b0b0b0');
+                $('.chat-footer').css('box-shadow', '0px -14px 25px -30px rgba(46,46,46,0.87)');
+            } else {
+                // console.log("Hide border");
+                // $('.chat-footer').css('border-top', '2px solid transparent');
+                $('.chat-footer').css('box-shadow', '0px 0px 0px 0px transparent');
+            }
+        });
+
+        $(".chat-body").scrollTop($('.chat-body')[0].scrollHeight);
+
     });
 </script>
 
-<div style="padding: 30px;">
-    <h2>Under development</h2>
+<style>
+    .team-channel-body{
+        overflow-y: hidden;
+    }
+    .chat-wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+    .chat-body{
+        flex: auto;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-y: scroll;
+    }
+    
+    .chat-footer{
+        flex: 80px;
+        width: 900px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        overflow-y: hidden;
+        box-shadow: 0px;
+    }
+    .message-sender{
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+    }
+    .message-sender input[type="text"]{
+        width: 700px;
+        border-bottom: 3px solid transparent;
+    }
+    .message-sender input[type="text"]:focus{
+        border-bottom: 3px solid blue;
+    }
+    .message-sender button{
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-left: .5px solid #dbdbdb;
+        background-color: #fff;
+    }
+    .message-sender button img{
+        height: 20px;
+    }
+
+    .chat-messages{
+        margin-top: 30px;
+        height: 100%;
+        width: 100%;
+        max-width: 850px;
+    }
+    
+    .message{
+        padding: 5px;
+        margin-top: 10px;
+        display: flex;
+    }
+
+    .left-message{
+        justify-content: flex-start;
+    }
+    .right-message{
+        justify-content: flex-end;
+    }
+
+    .message-container{
+        background: #fff;
+        padding: 10px;
+        min-width: 150px;
+        display: flex;
+        flex-direction: column;
+    }
+    .message-profile{
+        padding: 8px;
+    }
+    .message-profile img{
+        height: 30px;
+    }
+    .message-user{
+        font-weight: bold;
+        color: #000;
+    }
+    .message-time{
+        margin-left: auto;
+        color: #b3b3b3;
+        font-size: 12px;
+    }
+
+</style>
+
+<div class="chat-wrapper">
+    <div class="chat-body">
+        <div class="chat-messages">
+            <!-- <div class="message left-message">
+                <div class="message-profile">
+                    <img src="/static/images/icons/user.png">
+                </div>
+                <div class="message-container">
+                    <div class="message-user">Aswanth</div>
+                    <div class="message-content">
+                        Start
+                    </div>
+                    <div class="message-time">15:25</div>
+                </div>
+            </div>
+            <div class="message right-message">
+                <div class="message-container">
+                    <div class="message-user">Me</div>
+                    <div class="message-content">
+                        Hi!!
+                    </div>
+                    <div class="message-time">15:30</div>
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+    <div class="chat-footer">
+        <div class="message-sender">
+            <input type="text" placeholder="Type your message" id="message-field"><button id="send-message"><img src="/static/images/icons/send.png"></button>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

@@ -1,9 +1,15 @@
 .st-form-container{
     height: 100%;
     width: 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.st-form{
+    width: 100%;
+    max-width: 500px;
 }
 
 .st-form-container a{
@@ -19,6 +25,10 @@
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
 
 input[type="text"], 
 input[type="email"], 
@@ -76,15 +86,18 @@ input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled{
     margin-bottom: 20px;
     color: #FF0800;
 }
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+
+/*
+::-webkit-input-placeholder {
     font-family: 'Source Sans Pro', sans-serif;
 }
-::-moz-placeholder { /* Firefox 19+ */
+::-moz-placeholder {
     font-family: 'Source Sans Pro', sans-serif;
 }
-:-ms-input-placeholder { /* IE 10+ */
+:-ms-input-placeholder {
     font-family: 'Source Sans Pro', sans-serif;
 }
-:-moz-placeholder { /* Firefox 18- */
+:-moz-placeholder {
     font-family: 'Source Sans Pro', sans-serif;
 }
+*/

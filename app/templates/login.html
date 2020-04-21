@@ -5,6 +5,9 @@
 <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
+            $(".st-form-errors span").html('');
+            $(".st-form-errors").css('display', 'none');
+
             var url = "{{ url_for('login') }}";
             $.ajax({
                 type: "POST",
