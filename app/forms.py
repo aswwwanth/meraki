@@ -4,8 +4,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Team
 
 class RegistrationForm(FlaskForm):
-    fname = StringField('First Name', validators=[DataRequired()], render_kw={"placeholder": "First Name"})
-    lname = StringField('Last Name', validators=[DataRequired()], render_kw={"placeholder": "Last Name"})
+    name = StringField('Full Name', validators=[DataRequired()], render_kw={"placeholder": "Full Name"})
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
     username = StringField('Username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
     password = PasswordField('Password', validators=[DataRequired()],render_kw={"placeholder": "Password"})
@@ -19,7 +18,7 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('Username already exists')
+            raise ValidationError('Username not available')
 
     def validate_password(self,password):
         if len(password.data) < 8:

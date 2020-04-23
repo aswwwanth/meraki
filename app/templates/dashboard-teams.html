@@ -60,7 +60,7 @@
             {% for message in messages %}
             <div class="flash-notifications">
                 <div class="flash-message">
-                    {{ message }}
+                    {{ message|safe }}
                 </div>
                 <div class="close-flash">  
                     <img src="/static/images/icons/close.png">

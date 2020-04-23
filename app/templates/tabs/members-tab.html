@@ -12,11 +12,11 @@
         });
 
         $('.member-close').click(function(){
-            var d = $(this).parent().attr('id').split(" ");
+            var d = $(this).parent().attr('id');
             $('#page-mask').css('display', 'block');
             $('.pop-up').css('width', '560px');
             $('.pop-up').css('height', '250px');
-            html = '<div class="delete-team"style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to remove <b>@'+ d[1] +'</b> from the team?</p><form action="/team/remove?team={{ team.id }}&user='+ d[0] +'" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-remove" value="Cancel"></form></div>'
+            html = '<div class="delete-team"style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to remove <b>@'+ d +'</b> from the team?</p><form action="/team/remove?team={{ team.tcode }}&user='+ d +'" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-remove" value="Cancel"></form></div>'
             $('.pop-up').html(html);
             $('.cancel-remove').click(function(e){
                 e.preventDefault();
@@ -97,7 +97,7 @@
         {% for message in messages %}
         <div class="flash-notifications">
             <div class="flash-message">
-                {{ message }}
+                {{ message|safe }}
             </div>
             <div class="close-flash">  
                 <img src="/static/images/icons/close.png">
@@ -109,8 +109,8 @@
     <h2>Team Members</h2>
     <div class="list-members">
         {% for m in members %}
-        <div class="member" id="{{ m.id }} {{ m.username }}">
-            {% if admin_id == current_user.id and m.id != admin_id %}
+        <div class="member" id="{{ m.User.username }}">
+            {% if team.tadmin == current_user.username and m.User.username != team.tadmin %}
             <div class="member-close">
                 <img src="/static/images/icons/close.png">
             </div>
@@ -120,8 +120,8 @@
             </div>
             <div class="member-details">
                 <div>
-                    <h3>{{ m.fname}} {{ m.lname }} <span> (@{{ m.username }})</span> {% if admin_id == m.id %}<span class="admin-highlight">Admin</span>{% endif %}</h3>
-                    <p>{{ m.email }}</p>
+                    <h3>{{ m.User.name}} <span> (@{{ m.User.username }})</span> {% if team.tadmin == m.User.username %}<span class="admin-highlight">Admin</span>{% endif %}</h3>
+                    <p>{{ m.User.email }}</p>
                 </div>
             </div>
         </div>

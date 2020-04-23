@@ -13,7 +13,7 @@
         search = $('#mid').val();
         // console.log("Value = " + search);
         if(search != ''){
-            url = "/users/search?user=" + search + "&team={{ team.id }}";
+            url = "/users/search?user=" + search + "&team={{ team.tcode }}";
             $.ajax({
                 type: "GET",
                 url: url,
@@ -34,11 +34,11 @@
                         i = $(this).attr('id');
                         if(i > -1){
                             $('#submit').attr("disabled", false);
-                            html = "<div class=\"selected-user\" id=\"" + data[i]['username'] + "\"><div class=\"image\"><img src=\"/static/images/icons/user.png\"></div><div class=\"name\"><p>" + data[i]['fname'] + " " + data[i]['lname'] + "</p><p>" + data[i]['email'] + "</p></div><div class=\"close\"><img src=\"/static/images/icons/close.png\"></div></div>";
+                            html = "<div class=\"selected-user\" id=\"" + data[i]['username'] + "\"><div class=\"image\"><img src=\"/static/images/icons/user.png\"></div><div class=\"name\"><p>" + data[i]['name'] + "</p><p>" + data[i]['email'] + "</p></div><div class=\"close\"><img src=\"/static/images/icons/close.png\"></div></div>";
                             $('.selected-users').append(html);
                             $('.autocomplete-items').empty();
                             $('#mid').val("");
-                            selected_users.push(data[i]['uid']);
+                            selected_users.push(data[i]['username']);
                         }
                         // console.log(selected_users);
                     });

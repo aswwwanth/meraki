@@ -13,12 +13,8 @@ def is_member():
     def is_member_wrap(func):    
         @wraps(func)
         def d_view(tcode, *args, **kwargs):
-            team = Team.query.filter_by(tcode=tcode).first()
-            members = TeamMember.query.filter_by(tid=team.id).all()
-            user_list = []
-            for m in members:
-                user_list.append(m.mid)
-            if current_user.id in user_list:
+            isMember = TeamMember.query.filter_by(team_code=tcode,musername=current_user.username).first()
+            if isMember is not None:
                 return func(tcode, *args, **kwargs)
             flash('You are not a part of the team.')
             return redirect(url_for('dashboard'))
@@ -38,10 +34,9 @@ def register():
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data.lower()).first()
             user = User( 
-                email=form.email.data.lower(), 
-                fname=form.fname.data,
                 username=form.username.data.lower(),
-                lname=form.lname.data,
+                email=form.email.data.lower(), 
+                name=form.name.data,
                 verify=generateCode()
             )
             user.set_password(form.password.data)
@@ -77,7 +72,7 @@ def logout():
 @app.route('/dashboard/teams/')
 @login_required
 def dashboard():
-    teams = db.session.query(Team, TeamMember).filter(Team.id == TeamMember.tid, TeamMember.mid == current_user.id).all()
+    teams = db.session.query(Team, TeamMember).filter(Team.tcode==TeamMember.team_code, TeamMember.musername==current_user.username).all()
     return render_template('dashboard-teams.html', title="Teams", user=current_user, teams=teams)
 
 @app.route('/dashboard/chat/')
@@ -98,25 +93,30 @@ def create_team():
         if form.validate_on_submit():
             
             team_code = generateCode()
+
             team = Team( 
+                tcode=team_code,
                 tname=form.tname.data, 
                 tdesc=form.tdesc.data,
-                tadmin=current_user.id,
-                tcode=team_code
+                tadmin=current_user.username,
+                chatroom=generateCode()
             )
+            
             db.session.add(team)
             db.session.commit()
             
-            team = team.query.filter_by(tcode=team_code).first()
-            
             member = TeamMember(
-                tid = team.id,
-                mid = current_user.id
+                team_code = team.tcode,
+                musername = current_user.username
             )
+
             db.session.add(member)
             db.session.commit()
-            flash("Team " + form.tname.data + " successfully created ")
+            
+            flash("Team  <b>" + form.tname.data + "</b>  successfully created ")
+            
             return render_template('success_team.html', tcode=team_code)
+        
         return jsonify(data=form.errors)
 
     return render_template('create_team.html', title="Create team", user=current_user, form=form)
@@ -127,20 +127,22 @@ def join_team():
     form = JoinTeam()
     if request.method == 'POST':
         if form.validate_on_submit():
+            
             team = Team.query.filter_by(tcode=form.tcode.data).first()
+            
             if team is None:
                 return jsonify(data={'tcode': 'Team doesnt exist.'})
-            
-            team = team.query.filter_by(tcode=form.tcode.data).first()
 
             member = TeamMember(
-                tid = team.id,
-                mid = current_user.id
+                team_code = form.tcode.data,
+                musername = current_user.username
             )
+            
             db.session.add(member)
             db.session.commit()
+
             flash("You have successfully joined the team " + team.tname)
-            print(team)
+            
             return jsonify(data={'status': 200}) 
         return jsonify(data=form.errors) 
     
@@ -150,28 +152,30 @@ def join_team():
 @login_required
 @is_member()
 def leave_team(tcode):
+    
     team = Team.query.filter_by(tcode=tcode).first()
-    if current_user.id == team.tadmin:
+    if current_user.username == team.tadmin:
         return jsonify(data={'message': 'You cant leave the team, you are the admin!!!'})
 
-    TeamMember.query.filter_by(mid=current_user.id, tid=team.id).delete()
+    TeamMember.query.filter_by(musername=current_user.username, team_code=team.tcode).delete()
     db.session.commit()
     flash("Successfully left team " + team.tname)
+
     return redirect(url_for('dashboard'))
 
 @app.route('/team/add/<tcode>/', methods=['GET', 'POST'])
 @login_required
 def add_team_member(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    if current_user.id == team.tadmin:
+    if current_user.username == team.tadmin:
         if request.method == 'POST':
             user_list = request.form.getlist('users[]')
-            for uid in user_list:
-                check_user = TeamMember.query.filter_by(mid=uid,tid=team.id).first()
+            for uname in user_list:
+                check_user = TeamMember.query.filter_by(musername=uname,team_code=team.tcode).first()
                 if check_user is None:
                     member = TeamMember(
-                        tid = request.form.get('team'),
-                        mid = uid
+                        team_code = team.tcode,
+                        musername = uname
                     )
                     db.session.add(member)
                     db.session.commit()
@@ -182,16 +186,19 @@ def add_team_member(tcode):
     else:
         return jsonify(data={'message': 'Access denied.'})
 
-@app.route('/team/remove/', methods=['POST'])
+@app.route('/team/remove', methods=['POST'])
 @login_required
 def remove_team_member():
     team = request.args.get('team')
     user = request.args.get('user')
-    team = Team.query.filter_by(id=team).first()
-    if current_user.id == team.tadmin:
-        member = TeamMember.query.filter_by(mid=user, tid=team.id).first()
+    team = Team.query.filter_by(tcode=team).first()
+    if current_user.username == team.tadmin:
+        print("user = ", user)
+        print("Team code = ", team.tcode)
+        member = TeamMember.query.filter_by(musername=user, team_code=team.tcode).first()
         if member is not None:
-            TeamMember.query.filter_by(mid=user, tid=team.id).delete()
+            print("HERE ", member)
+            TeamMember.query.filter_by(musername=user, team_code=team.tcode).delete()
             db.session.commit()
             flash("User successfully removed.")
         return redirect('/team/' + team.tcode + '/members/')
@@ -202,11 +209,10 @@ def remove_team_member():
 @login_required
 def delete_team(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    if current_user.id == team.tadmin:
+    if current_user.username == team.tadmin:
         if request.method == 'POST':
-            team = Team.query.filter_by(tcode=tcode).first()
-            TeamMember.query.filter_by(tid=team.id).delete()
-            Team.query.filter_by(id=team.id).delete()
+            TeamMember.query.filter_by(team_code=team.tcode).delete()
+            Team.query.filter_by(tcode=team.tcode).delete()
             db.session.commit()
             message = "Team " + team.tname + " is successfully deleted and all the data associated with it was removed from our system."
             flash(message)
@@ -221,8 +227,7 @@ def delete_team(tcode):
 @is_member()
 def team_chat(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    admin_id = team.tadmin;
-    return render_template('tabs/chat-tab.html', admin_id=admin_id, team=team)
+    return render_template('tabs/chat-tab.html', team=team)
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/tasks/')
@@ -230,26 +235,18 @@ def team_chat(tcode):
 @is_member()
 def team_tasks(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    admin_id = team.tadmin;
-    return render_template('tabs/tasks-tab.html', admin_id=admin_id, team=team)
+    return render_template('tabs/tasks-tab.html', team=team)
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/members/')
 @login_required
 @is_member()
 def team_members(tcode):
-    
+
     team = Team.query.filter_by(tcode=tcode).first()
-    admin_id = team.tadmin;
-
-    get_ids = TeamMember.query.filter_by(tid=team.id).all()
-    user_list = []
-    for u in get_ids:
-        user_list.append(u.mid)
-
-    get_details = User.query.filter(User.id.in_(user_list)).all()
+    get_details = db.session.query(User,TeamMember).filter(TeamMember.team_code==tcode,User.username==TeamMember.musername).all()
     
-    return render_template('tabs/members-tab.html',admin_id=admin_id, team=team, members=get_details)
+    return render_template('tabs/members-tab.html', team=team, members=get_details)
 
 
 @app.route('/users/search/', methods=['GET'])
@@ -258,56 +255,41 @@ def search_user():
     responseObject = []
     user = request.args.get('user')
     team = request.args.get('team')
-    # print(user, team)
     search = "%" + user + "%"
     user = User.query.filter(User.username.like(search)).all()
     if team is None:
         for u in user:
             responseObject.append({
-                'uid': u.id,
                 'username': u.username,
-                'fname': u.fname,
-                'lname': u.lname,
+                'name': u.name,
                 'email': u.email
             })
     else:
         for u in user:
-            check_team = TeamMember.query.filter_by(tid=team, mid=u.id).first()
+            check_team = TeamMember.query.filter_by(team_code=team, musername=u.username).first()
             if check_team is None:
                 responseObject.append({
-                    'uid': u.id,
                     'username': u.username,
-                    'fname': u.fname,
-                    'lname': u.lname,
+                    'name': u.name,
                     'email': u.email
                 })
 
     return jsonify(responseObject)
 
-@app.route('/members/', methods=['GET'])
+# Messages
+@app.route('/messages/<tcode>/', methods=['GET'])
 @login_required
-def get_members():
-    
-    responseObject = []
-    team = request.args.get('team')
-    team = Team.query.filter_by(tcode=team).first()
-    if team is None:
-        return jsonify(data={'message' : 'Team not found'})
-
-    get_ids = TeamMember.query.filter_by(tid=team.id).all()
-    user_list = []
-    for u in get_ids:
-        user_list.append(u.mid)
-
-    get_details = User.query.filter(User.id.in_(user_list)).all()
-    
-    for e in get_details:
-        responseObject.append({
-            'uid': e.id,
-            'username': e.username,
-            'fname': e.fname,
-            'lname': e.lname,
-            'email': e.email
+@is_member()
+def get_messages(tcode):
+    messages = TeamChat.query.filter_by(team_code=tcode).order_by(TeamChat.time.asc()).all()
+    payLoad = []
+    for m in messages:
+        db_time = m.time
+        if db_time.date() == datetime.datetime.today().date():
+            db_time = db_time.strftime("%I:%M:%p")
+        payLoad.append({
+            'username': m.sender_username,
+            'message': m.message,
+            'time': db_time
         })
-
-    return jsonify(responseObject)
+    return jsonify(payLoad)

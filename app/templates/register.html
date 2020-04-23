@@ -12,6 +12,7 @@
                 success: function (data) {
                     console.log(data);
                     if(data.hasOwnProperty('data')){    
+                        
                         data = data.data;
 
                         if(data.hasOwnProperty('email')){
@@ -30,20 +31,12 @@
                             $(".st-form-errors.username").css('display', 'none');
                         }
 
-                        if(data.hasOwnProperty('fname')){
-                            $(".st-form-errors.fname span").html(data['fname']);
-                            $(".st-form-errors.fname").css('display', 'block');
+                        if(data.hasOwnProperty('name')){
+                            $(".st-form-errors.name span").html(data['name']);
+                            $(".st-form-errors.name").css('display', 'block');
                         }
                         else{
-                            $(".st-form-errors.fname").css('display', 'none');
-                        }
-
-                        if(data.hasOwnProperty('lname')){
-                            $(".st-form-errors.lname span").html(data['lname']);
-                            $(".st-form-errors.lname").css('display', 'block');
-                        }
-                        else{
-                            $(".st-form-errors.lname").css('display', 'none');
+                            $(".st-form-errors.name").css('display', 'none');
                         }
 
                         if(data.hasOwnProperty('password')){
@@ -82,14 +75,10 @@
         <p>Already have an account ? <a href="/login/"><span class="link">Sign in</span></a></p>
         <form action="" method="post" novalidate autocomplete="off">
             {{ form.hidden_tag() }}
-            <div class="st-form-field fname">
-                {{ form.fname }}
+            <div class="st-form-field name">
+                {{ form.name }}
             </div>
-            <div class="st-form-errors fname"><span></span></div>
-            <div class="st-form-field">
-                {{ form.lname }}
-            </div>
-            <div class="st-form-errors lname"><span></span></div>
+            <div class="st-form-errors name"><span></span></div>
             <div class="st-form-field">
                 {{ form.username }}
             </div>

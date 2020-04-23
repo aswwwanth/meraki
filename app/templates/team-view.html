@@ -72,7 +72,7 @@
             </div>
             <div style="margin-top: 20px;">
                 <center>
-                    {% if admin_id != current_user.id %}
+                    {% if team.tadmin != current_user.username %}
                     <input type="submit" value="Leave team" class="leave-team">
                     {% else %}
                     <input type="submit" class ="add-member" value="Add Member" style="width: 120px; margin-right: 10px;">
