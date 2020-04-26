@@ -288,11 +288,11 @@ def get_user_info(username):
 def convert_time(time):
     db_time = time
     if(db_time.date() == datetime.datetime.today().date()):
-        db_time = db_time.strftime("%I:%M%p")
+        db_time = db_time.strftime("%I:%M %p")
     elif(db_time.year == datetime.datetime.today().year):
-        db_time = db_time.strftime("%d %b %I:%M%p")
+        db_time = db_time.strftime("%d %b %I:%M %p")
     else:
-        db_time = db_time.strftime("%d %b %Y %I:%M%p")
+        db_time = db_time.strftime("%d %b %Y %I:%M %p")
     return db_time
 
 # Messages

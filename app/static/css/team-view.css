@@ -7,7 +7,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 370px auto;
     grid-template-areas: "lt rt";
 } 
 

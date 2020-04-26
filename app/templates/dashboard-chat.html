@@ -11,6 +11,8 @@
         $('.dash-side div').removeClass('active');
         $('.dash-side-item.chat').addClass('active');
         
+        var first = true;
+
         var room = window.location.hash.substring(1);
 
         var socket = io.connect('http://localhost:5000');
@@ -99,6 +101,12 @@
         }
 
         function selectUser(username){
+            if(username == '')
+                return;
+            if(first == true){
+                $('.dash-chat-right').html('<div class="chat-header"><div class="header-image"><img src="/static/images/icons/user.png"></div><div class="header-info"><span class="header-user-name"></span><span class="header-username"></span> </div></div><div class="chat-body-wrapper chat-wrapper"><div class="chat-body"><div class="chat-messages"></div></div><div class="chat-footer"><div class="message-sender"><input type="text" placeholder="Type your message" id="message-field"><button id="send-message"></button></div></div></div>');
+                first = false;
+            }
             removeResults();
             console.log("Leaving room " + room);
             socket.emit('leave_private_room', {'room': room});
@@ -158,12 +166,20 @@
                         else{
                             $('.users').append(`<div class="search-result" style="margin: 10px;">No users found.</div>`);
                         }
+                        $('.search-close-button').css('display', 'block');
                     }
                 });
             }
             else{
                 removeResults();
+                $('.search-close-button').css('display', 'none');
             }
+        });
+
+        $('.search-close-button').click(function(){
+            removeResults();
+            $('#search-field').val('');
+            $('.search-close-button').css('display', 'none');
         });
 
     });
@@ -174,7 +190,7 @@
         height: 100%;
         width: 100%;
         display: grid;
-        grid-template-columns: 20% 80%;
+        grid-template-columns: 370px auto;
         grid-template-areas: "lt rt";
     } 
 
@@ -234,10 +250,12 @@
     }
 
     .user-info{
-        flex: 1 1 auto;
+        flex: 0 0 220px;
         display: flex;
         flex-direction: column;
         font-size: 13px;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .user-last-message{
@@ -245,8 +263,10 @@
     }
 
     .user-date{
-        flex: 0 0 50px;
-        font-size: 14px;
+        flex: 0 0 90px;
+        display: flex;
+        justify-content: center;
+        font-size: 13px;
     }
 
     .dash-chat-right{
@@ -284,6 +304,20 @@
         overflow-y: auto;
     }
 
+    .search-close-button{
+        border: none;
+        background-color: #d1d1d1;
+        height: 40px;
+        width: 40px;
+        background-image: url('/static/images/icons/close.png');
+        background-size: 10px;
+        padding-right: 5px;
+        cursor: pointer;
+        display: none;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
     .hide{
         display: none;
     }
@@ -293,6 +327,7 @@
     <div class="dash-chat-left">
         <div class="search-users">
             <input type="text" placeholder="Search" id="search-field">
+            <button class="search-close-button"></button>
         </div>
         <div class="users">
             <!-- <div class="user user-thread" id="username">
@@ -310,46 +345,9 @@
         </div>
     </div>
     <div class="dash-chat-right">
-        <div class="chat-header">
-            <div class="header-image">
-                <img src="/static/images/icons/user.png">
-            </div>
-            <div class="header-info">
-                <span class="header-user-name">Name</span>
-                <span class="header-username">@username</span> 
-            </div>
-        </div>
-        <div class="chat-body-wrapper chat-wrapper">
-            <div class="chat-body">
-                <div class="chat-messages">
-                    <div class="message left-message">
-                        <div class="message-profile">
-                            <img src="/static/images/icons/user.png">
-                        </div>
-                        <div class="message-container">
-                            <div class="message-user">Aswanth</div>
-                            <div class="message-content">
-                                Start
-                            </div>
-                            <div class="message-time">15:25</div>
-                        </div>
-                    </div>
-                    <div class="message right-message">
-                        <div class="message-container">
-                            <div class="message-user">Me</div>
-                            <div class="message-content">
-                                Hi!!
-                            </div>
-                            <div class="message-time">15:30</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-footer">
-                <div class="message-sender">
-                    <input type="text" placeholder="Type your message" id="message-field"><button id="send-message"></button>
-                </div>
-            </div>
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h2>Start a conversation.</h2>
+            <img src="/static/images/icons/conversation.png" height="300px" style="margin-top: 50px;">
         </div>
     </div>
 </div>

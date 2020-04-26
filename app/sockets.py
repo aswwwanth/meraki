@@ -66,7 +66,7 @@ def send_private_message(data):
     payLoad = {
         'username': current_user.username, 
         'message': data['message'],
-        'time': now.strftime("%I:%M:%p")
+        'time': now.strftime("%I:%M %p")
     }
     room = get_private_room(user.chatroom, current_user.chatroom)
     emit('private_message', payLoad, room=room)
@@ -89,6 +89,6 @@ def send_team_message(data):
     payLoad = {
         'username': current_user.username, 
         'message': data['message'],
-        'time': now.strftime("%I:%M:%p")
+        'time': now.strftime("%I:%M %p")
     }
     emit('team_message', payLoad, room=team.chatroom)
