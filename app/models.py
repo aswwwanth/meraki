@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
 	password_hash = db.Column(db.String(256))
 	verify = db.Column(db.String(512))
 	isVerified = db.Column(db.Boolean, default=False)
-	roomId = db.Column(db.String(512), unique=True, index=True)
+	chatroom = db.Column(db.String(512), unique=True, index=True)
 	
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -56,14 +56,14 @@ class TeamChat(db.Model):
 	message = db.Column(db.Text)
 	time = db.Column(db.DateTime)
 
-class SeenPrivate(db.Model):
+# class SeenPrivate(db.Model):
 
-	from_id = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True)
-	recipient_username = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True, index=True)
-	last_read = db.Column(db.Integer, db.ForeignKey(PrivateChat.id))
+# 	from_id = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True)
+# 	recipient_username = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True, index=True)
+# 	last_read = db.Column(db.Integer, db.ForeignKey(PrivateChat.id))
 
-class SeenTeam(db.Model):
+# class SeenTeam(db.Model):
 
-	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode), primary_key=True)
-	recipient_username = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True, index=True)
-	last_read = db.Column(db.Integer, db.ForeignKey(TeamChat.id))
+# 	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode), primary_key=True)
+# 	recipient_username = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True, index=True)
+# 	last_read = db.Column(db.Integer, db.ForeignKey(TeamChat.id))

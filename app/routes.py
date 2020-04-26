@@ -37,7 +37,8 @@ def register():
                 username=form.username.data.lower(),
                 email=form.email.data.lower(), 
                 name=form.name.data,
-                verify=generateCode()
+                verify=generateCode(),
+                chatroom=generateCode()
             )
             user.set_password(form.password.data)
             db.session.add(user)
@@ -113,7 +114,7 @@ def create_team():
             db.session.add(member)
             db.session.commit()
             
-            flash("Team  <b>" + form.tname.data + "</b>  successfully created ")
+            flash("Team " + form.tname.data + " successfully created ")
             
             return render_template('success_team.html', tcode=team_code)
         
@@ -248,7 +249,6 @@ def team_members(tcode):
     
     return render_template('tabs/members-tab.html', team=team, members=get_details)
 
-
 @app.route('/users/search/', methods=['GET'])
 @login_required
 def search_user():
@@ -259,11 +259,12 @@ def search_user():
     user = User.query.filter(User.username.like(search)).all()
     if team is None:
         for u in user:
-            responseObject.append({
-                'username': u.username,
-                'name': u.name,
-                'email': u.email
-            })
+            if u.username != current_user.username:
+                responseObject.append({
+                    'username': u.username,
+                    'name': u.name,
+                    'email': u.email
+                })
     else:
         for u in user:
             check_team = TeamMember.query.filter_by(team_code=team, musername=u.username).first()
@@ -276,20 +277,81 @@ def search_user():
 
     return jsonify(responseObject)
 
+@app.route('/user/<username>/', methods=['GET'])
+@login_required
+def get_user_info(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        return jsonify('Not found')
+    return jsonify(data={'username': user.username, 'name': user.name})
+
+def convert_time(time):
+    db_time = time
+    if(db_time.date() == datetime.datetime.today().date()):
+        db_time = db_time.strftime("%I:%M%p")
+    elif(db_time.year == datetime.datetime.today().year):
+        db_time = db_time.strftime("%d %b %I:%M%p")
+    else:
+        db_time = db_time.strftime("%d %b %Y %I:%M%p")
+    return db_time
+
 # Messages
-@app.route('/messages/<tcode>/', methods=['GET'])
+@app.route('/messages/team/<tcode>/', methods=['GET'])
 @login_required
 @is_member()
-def get_messages(tcode):
+def get_team_messages(tcode):
+    
     messages = TeamChat.query.filter_by(team_code=tcode).order_by(TeamChat.time.asc()).all()
+    
     payLoad = []
     for m in messages:
-        db_time = m.time
-        if db_time.date() == datetime.datetime.today().date():
-            db_time = db_time.strftime("%I:%M:%p")
+        db_time = convert_time(m.time)
         payLoad.append({
             'username': m.sender_username,
             'message': m.message,
             'time': db_time
         })
+
+    return jsonify(payLoad)
+
+@app.route('/messages/private/<username>/', methods=['GET'])
+@login_required
+def get_private_messages(username):
+
+    messages = db.session.query(PrivateChat).filter(((PrivateChat.sender_username==current_user.username) | (PrivateChat.recipient_username==current_user.username)) & ((PrivateChat.sender_username==username) | (PrivateChat.recipient_username==username))).order_by(PrivateChat.time.asc()).all()
+    
+    payLoad = []
+    for m in messages:
+        db_time = convert_time(m.time)        
+        payLoad.append({
+            'username': m.sender_username,
+            'message': m.message,
+            'time': db_time
+        })
+
+    return jsonify(payLoad)
+
+@app.route('/messages/private/recent/', methods=['GET'])
+@login_required
+def get_private_recent():
+
+    messages = db.session.execute("select * from private_chat a where id = (select max(id) from private_chat where (sender_username = a.sender_username and recipient_username = a.recipient_username) or (sender_username = a.recipient_username and recipient_username = a.sender_username)) and (sender_username = '"+ current_user.username +"' or recipient_username = '"+ current_user.username +"') order by time desc;")
+    
+    payLoad = []
+    for m in messages:
+        db_time = convert_time(m[4])
+        
+        username = m[1]
+        message = m[3]
+
+        if username == current_user.username:
+            username = m[2]
+            message = 'You: ' + message
+
+        payLoad.append({
+            'username': username,
+            'message': message,
+            'time': db_time
+        })
+
     return jsonify(payLoad)

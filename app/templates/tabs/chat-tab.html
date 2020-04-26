@@ -2,31 +2,21 @@
 
 {% block righttab %}
 
+<link rel="stylesheet" href="/static/css/chat.css">
+<script src="/static/js/chat.js"></script>
+
 <script>
     $(document).ready(function(){
+
         $('.tabs p').removeClass('active');
         $('.chat-tab').addClass('active');
 
-        function scrollToBottom(){
-            $(".chat-body").scrollTop($('.chat-body')[0].scrollHeight);
-        }
-
-        function addMessage(data){
-            var message_processed;
-            if(data.username == '{{ current_user.username }}')
-                message_processed = `<div class="message right-message"><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
-            else
-                message_processed = `<div class="message left-message"><div class="message-profile"><img src="/static/images/icons/user.png"></div><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
-            $('.chat-messages').append(message_processed);
-            scrollToBottom();
-        }
-
         $.ajax({
             type: "GET",
-            url: '/messages/{{ team.tcode }}/',
+            url: '/messages/team/{{ team.tcode }}/',
             success: function (data) {
                 $.each(data, function(key, value){
-                    addMessage(value);
+                    addMessage(value, '{{ current_user.username }}');
                 });
             }
         });
@@ -49,157 +39,13 @@
 
         // Recieve message
         socket.on('team_message', function(data){
-            addMessage(data);
-        });
-
-        // Check scroll
-        $(".chat-body").scroll(function() {
-            if($(this).scrollTop() + $(this).innerHeight() + 5 < $(this)[0].scrollHeight) {
-                $('.chat-footer').css('box-shadow', '0px -14px 25px -30px rgba(46,46,46,0.87)');
-            } else {
-                $('.chat-footer').css('box-shadow', '0px 0px 0px 0px transparent');
-            }
+            addMessage(data, '{{ current_user.username }}');
         });
 
         scrollToBottom();
 
     });
 </script>
-
-<style>
-    .team-channel-body{
-        overflow-y: hidden;
-    }
-    .chat-wrapper{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-    }
-    .chat-body{
-        flex: auto;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow-y: scroll;
-    }
-    
-    .chat-footer{
-        flex: 100px;
-        width: 900px;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        overflow-y: hidden;
-        box-shadow: 0px;
-    }
-    .message-sender{
-        display: flex;
-        flex-direction: row;
-        padding-bottom: 20px;
-    }
-    .message-sender input[type="text"]{
-        width: 700px;
-        border-bottom: 3px solid transparent;
-    }
-    .message-sender input[type="text"]:focus{
-        border-bottom: 3px solid #070d97;
-    }
-    .message-sender button{
-        height: 50px;
-        width: 50px;
-        cursor: pointer;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-left: 1px solid #dbdbdb;
-        background-color: #fff;
-        background-image: url('/static/images/icons/send.png');
-        background-size: 20px;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-    .message-sender button:hover{
-        background-image: url('/static/images/icons/send(b).png');
-    }
-
-    .chat-messages{
-        padding-top: 30px;
-        height: 100%;
-        width: 100%;
-        max-width: 850px;
-    }
-    
-    .message{
-        padding: 5px;
-        margin-top: 10px;
-        display: flex;
-    }
-
-    .left-message{
-        justify-content: flex-start;
-    }
-    .right-message{
-        justify-content: flex-end;
-    }
-
-    .message-container{
-        background: #fff;
-        padding: 10px;
-        min-width: 150px;
-        max-width: 600px;
-        word-wrap: break-word;
-        display: flex;
-        flex-direction: column;
-    }
-    .message-profile{
-        padding: 8px;
-    }
-    .message-profile img{
-        height: 30px;
-    }
-    .message-user{
-        /* font-weight: bold; */
-        color: #484644;
-        font-size: 14px;
-    }
-    .message-content{
-        font-size: 14px;
-        color: #252423;
-    }
-    .message-time{
-        margin-left: auto;
-        color: #b3b3b3;
-        font-size: 10px;
-    }
-
-    ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-        font-size: 14px;
-        font-family: "Helvetica Neue", Helvetica, sans-serif;
-        color: #000;
-    }
-    ::-moz-placeholder { /* Firefox 19+ */
-        font-size: 14px;
-        font-family: "Helvetica Neue", Helvetica, sans-serif;
-        color: #000;
-    }
-    :-ms-input-placeholder { /* IE 10+ */
-        font-size: 14px;
-        font-family: "Helvetica Neue", Helvetica, sans-serif;
-        color: #000;
-    }
-    :-moz-placeholder { /* Firefox 18- */
-        font-size: 14px;
-        font-family: "Helvetica Neue", Helvetica, sans-serif;
-        color: #000;
-    }
-</style>
 
 <div class="chat-wrapper">
     <div class="chat-body">
