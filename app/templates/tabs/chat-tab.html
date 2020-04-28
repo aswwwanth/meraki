@@ -23,7 +23,7 @@
 
         var url = 'http://' + document.domain;
         if(location.port != '')
-            url = 'http://' + document.domain + ':' + location.port;
+            url = 'https://' + document.domain + ':' + location.port;
 
         // Socket connection
         var socket = io.connect(url);
