@@ -21,6 +21,11 @@ def is_member():
         return d_view
     return is_member_wrap
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
 @app.route('/')
 def home():
     if current_user.is_authenticated:
