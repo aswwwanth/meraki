@@ -21,8 +21,12 @@
             }
         });
 
+        var url = 'http://' + document.domain;
+        if(location.port != '')
+            url = 'http://' + document.domain + ':' + location.port;
+
         // Socket connection
-        var socket = io.connect('{{ config.URL }}');
+        var socket = io.connect(url);
         socket.emit('join_team_channel', {'room': '{{ team.tcode }}'});
 
         socket.on('general', function(message) {
