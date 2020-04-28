@@ -22,7 +22,7 @@
         });
 
         // Socket connection
-        var socket = io.connect('http://localhost:5000');
+        var socket = io.connect('{{ config.URL }}');
         socket.emit('join_team_channel', {'room': '{{ team.tcode }}'});
 
         socket.on('general', function(message) {
