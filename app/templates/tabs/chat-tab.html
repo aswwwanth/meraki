@@ -33,12 +33,23 @@
             console.log(message);
         });
 
-        // Send message
-        $('#send-message').click(function(e){
-            e.preventDefault();
+        // Function to send message
+        function sendMessage(){
             if($('#message-field').val() != '')
                 socket.emit('team_message', {'message': $('#message-field').val(), 'room': '{{ team.tcode }}'});
             $('#message-field').val('');
+        }
+
+        // Event listeners for send message button
+        $('#send-message').click(function(e){
+            e.preventDefault();
+            sendMessage();    
+        });
+
+        $("#message-field").on('keyup', function (e) {
+            if (e.keyCode === 13) {
+                sendMessage();
+            }
         });
 
         // Recieve message

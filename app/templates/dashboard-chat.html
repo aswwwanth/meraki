@@ -29,18 +29,14 @@
             console.log("General: " + message);
         });
 
-        socket.on('connect', function(){
-            console.log("Socket connected");
-        });
-
         socket.on('private_message', function(data){
             addMessage(data, '{{ current_user.username }}');
             lastMessage(data);
         });
 
         socket.on('new_private_message', function(data){
-            console.log("New private message");
-            console.log(data);
+            // console.log("New private message");
+            // console.log(data);
             if(data['username'] != '{{ current_user.username }}' && room != data['username']){
                 $('#id' + data['username']).remove();
                 addUserThread(data, 1);
@@ -60,6 +56,7 @@
             $('.user').addClass('hide');
         }
 
+        //function to add last sent message to recents
         function lastMessage(data){
             select = '#id' + data['username'];
             if(data['username'] == '{{ current_user.username }}'){
@@ -74,6 +71,7 @@
             });
         }
 
+        // function to load messages of the selected user thread
         function loadMessages(username){
             // console.log("Loading messages");
             $('.chat-messages').html('');
@@ -89,6 +87,7 @@
             }); 
         }
 
+        // function to add user thread to recents
         function addUserThread(data, mode){
             user_thread = `<div class="user user-thread" id="id${data['username']}"><div class="user-image"><img src="/static/images/icons/user.png"></div><div class="user-info"><span class="user-username">${data['username']}</span><span class="user-last-message">${data['message']}</span></div><div class="user-date">${data['time']}</div></div>`;
             if(mode == 0)
@@ -97,20 +96,36 @@
                 $('.users').prepend(user_thread);
         }
 
+        // function to send message
+        function sendMessage(){
+            // console.log("Sending message");
+            if($('#message-field').val() != '')
+                socket.emit('private_message', {'message': $('#message-field').val(), 'room': room});
+            $('#message-field').val('');
+        }
+        
         function selectUser(username){
+            
             if(username == '')
                 return;
+            
             if(first == true){
                 $('.dash-chat-right').html('<div class="chat-header"><div class="header-image"><img src="/static/images/icons/user.png"></div><div class="header-info"><span class="header-user-name"></span><span class="header-username"></span> </div></div><div class="chat-body-wrapper chat-wrapper"><div class="chat-body"><div class="chat-messages"></div></div><div class="chat-footer"><div class="message-sender"><input type="text" placeholder="Type your message" id="message-field"><button id="send-message"></button></div></div></div>');
+                
+                // event listeners for send message button
                 $('#send-message').click(function(e){
-                    console.log("Sending message");
                     e.preventDefault();
-                    if($('#message-field').val() != '')
-                        socket.emit('private_message', {'message': $('#message-field').val(), 'room': room});
-                    $('#message-field').val('');
                 });
+                
+                $("#message-field").on('keyup', function (e) {
+                    if (e.keyCode === 13) {
+                        sendMessage();
+                    }
+                });
+                
                 first = false;
             }
+
             removeResults();
             $('#message-field').val('');
             console.log("Leaving room " + room);

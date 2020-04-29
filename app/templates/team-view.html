@@ -64,8 +64,9 @@
             </div>
             </a>
             <center>
-                <img src="/static/images/icons/teamwork.png" height="100px">
-                <h1 style="margin-top: 10px;">{{ team.tname }}</h1>
+                {% set name = team.tname.split(' ') %}
+                <img src="/static/images/teams/{% if name|length > 1 %}{{name[0][0]|upper}}{{name[1][0]|upper}}{% else %}{{name[0][0]|upper}}{% endif %}.png" height="100px"><br><br>
+                <span class="team-name">{{ team.tname }}</span>
             </center>
             <div style="margin-top: 20px">
                 <p>{{ team.tdesc }}</p>
@@ -85,7 +86,7 @@
     <div class="team-details-right">
         <div class="team-channel-head">
             <div>
-                <img src="/static/images/icons/teamwork.png" height="30px">
+                <img src="/static/images/teams/{% if name|length > 1 %}{{name[0][0]|upper}}{{name[1][0]|upper}}{% else %}{{name[0][0]|upper}}{% endif %}.png" height="30px">
             </div>
             <div>
                 <h3>{{ team.tname }} </h3>

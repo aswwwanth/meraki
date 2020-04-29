@@ -12,7 +12,7 @@
 } 
 
 .team-details-left{
-    padding: 30px;
+    padding: 15px;
 }
 
 .team-details-left{
@@ -37,7 +37,7 @@
     padding-left: 20px;
     display: flex;
     align-items: center;
-    border-bottom: 0.5px solid #d1cfcf;
+    border-bottom: .1rem solid rgba(37,36,35,.05);
 }
 
 .team-channel-head div, .team-channel-head a{

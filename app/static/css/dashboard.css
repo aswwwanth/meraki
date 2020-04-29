@@ -8,7 +8,7 @@ body{
     padding-top: 50px;
     /* overflow: hidden; */
     display: grid;
-    grid-template-columns: 60px auto; 
+    grid-template-columns: 65px auto; 
     grid-template-areas: 'side teams';
 } 
 
@@ -18,12 +18,20 @@ body{
 }
 
 .dash-side-item{
+    height: 70px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-left: 3px solid transparent;
+}
+
+.dash-side-item span{
+    color: #fff;
+    font-size: 10px;
 }
 
 .dash-side-item:hover{
@@ -32,11 +40,12 @@ body{
 }
 
 .dash-side-item.active{
-    border-left: 3px solid white;
+    border-left: 3px solid #fff;
 }
 
 .dash-side-item img{
-    height: 23px;
+    height: 20px;
+    margin: 3px;
 }
 .dash-right{
     width: 100%;
@@ -50,6 +59,8 @@ body{
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-areas: "lt rt";
+    padding: 15px 25px 15px 35px;
+    border-bottom: .1rem solid rgba(37,36,35,.05);
 }
 
 .team-head-left, .team-head-right{
@@ -68,19 +79,13 @@ body{
 }
 
 .teams-view{
-    padding-top: 20px;
+    padding: 20px 25px 25px 35px;
     /* height: 100%; */
     width: 100%;
     display: grid;
     grid-gap: 25px;
     grid-auto-rows: min-content;
-    grid-template-columns: repeat(2, 1fr);
-}
-
-@media (min-width: 1200px) {
-    .teams-view{
-        grid-template-columns: repeat(3, 1fr);
-    }
+    grid-template-columns: repeat(3, 1fr);
 }
 
 @media (min-width: 1200px) {
@@ -89,15 +94,21 @@ body{
     }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
     .teams-view{
         grid-template-columns: repeat(5, 1fr);
     }
 }
 
-@media (min-width: 1700px) {
+@media (min-width: 1400px) {
     .teams-view{
         grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (min-width: 1700px) {
+    .teams-view{
+        grid-template-columns: repeat(7, 1fr);
     }
 }
 
@@ -105,6 +116,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     height: 220px;
     background-color: #fff;
     box-shadow: 0 .2rem .4rem -.075rem rgba(0,0,0,.1);
@@ -116,6 +128,6 @@ body{
     cursor: pointer;
 }
 
-.team-card span{
+.team-name{
     font-size: 18px;
 }

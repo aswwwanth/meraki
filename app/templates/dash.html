@@ -5,15 +5,24 @@
 <link rel="stylesheet" href="/static/css/dashboard.css">
 <div class="dash-wrapper">
     <div class="dash-side">
-        <a href="/dashboard/teams/"><div class="dash-side-item teams">
+        <a href="/dashboard/teams/" >
+        <div class="dash-side-item teams">
             <img src="/static/images/icons/teams.png">
-        </div></a>
-        <a href="/dashboard/chat/"><div class="dash-side-item chat">
-            <img src="/static/images/icons/chat.png">
-        </div></a>
-        <a href="/dashboard/tasks/"><div class="dash-side-item tasks">
-            <img src="/static/images/icons/tasks.png">
-        </div></a>
+            <span>Teams</span>
+        </div>
+        </a>
+        <a href="/dashboard/chat/">
+            <div class="dash-side-item chat">
+                <img src="/static/images/icons/chat.png">
+                <span>Chat</span>
+            </div>
+        </a>
+        <a href="/dashboard/tasks/">
+            <div class="dash-side-item tasks">
+                <img src="/static/images/icons/tasks.png">
+                <span>Tasks</span>
+            </div>
+        </a>
     </div>
     <div class="dash-right">
         {% block dashright %} {% endblock %}
