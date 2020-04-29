@@ -74,7 +74,31 @@ body{
     display: grid;
     grid-gap: 25px;
     grid-auto-rows: min-content;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 1200px) {
+    .teams-view{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .teams-view{
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+    .teams-view{
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (min-width: 1700px) {
+    .teams-view{
+        grid-template-columns: repeat(6, 1fr);
+    }
 }
 
 .team-card{
@@ -84,9 +108,14 @@ body{
     height: 220px;
     background-color: #fff;
     box-shadow: 0 .2rem .4rem -.075rem rgba(0,0,0,.1);
+    padding: 15px;
 }
 
 .team-card:hover{
-    background-color:f3f2f1;
+    background-color: #f3f2f1;
     cursor: pointer;
+}
+
+.team-card span{
+    font-size: 18px;
 }

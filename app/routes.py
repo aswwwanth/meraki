@@ -344,7 +344,14 @@ def get_private_recent():
     
     payLoad = []
     for m in messages:
-        db_time = convert_time(m[4])
+        db_time = m[4]
+        
+        if(db_time.date() == datetime.datetime.today().date()):
+            db_time = db_time.strftime("%I:%M %p")
+        elif(db_time.year == datetime.datetime.today().year):
+            db_time = db_time.strftime("%d %b")
+        else:
+            db_time = db_time.strftime("%b %Y")
         
         username = m[1]
         message = m[3]

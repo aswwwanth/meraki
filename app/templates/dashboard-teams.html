@@ -54,7 +54,7 @@
 <div class="pop-up" style="width: 600px" heigh="350px;"></div>
 <div class="team-dash-wrapper">
     <div class="team-dash-content">
-        <h1>Hello {{ user.fname }}!</h1>
+        <h1>Hello {{ user.name }}!</h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
@@ -82,7 +82,11 @@
         <div class="teams-view">
             {% if teams %}
                 {% for item in teams %}
-                    <a href="/team/{{ item.Team.tcode }}/""><div class="team-card"><h1>{{ item.Team.tname }}</h1></div></a>  
+                    <a href="/team/{{ item.Team.tcode }}/"">
+                        <div class="team-card">
+                            <span><center>{{ item.Team.tname }}</center></span>
+                        </div>
+                    </a>  
                 {% endfor %}
             {% endif %}
         </div>
