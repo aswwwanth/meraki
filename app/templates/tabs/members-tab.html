@@ -16,7 +16,7 @@
             $('#page-mask').css('display', 'block');
             $('.pop-up').css('width', '560px');
             $('.pop-up').css('height', '250px');
-            html = '<div class="delete-team"style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to remove <b>@'+ d +'</b> from the team?</p><form action="/team/remove?team={{ team.tcode }}&user='+ d +'" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-remove" value="Cancel"></form></div>'
+            html = `<div class="delete-team"style="padding: 60px; text-align: justify;"><h2>Are you sure?</h2><p style="margin-top: 15px; margin-bottom: 15px;">Are you sure you want to remove <b>@ ${d}</b> from the team?</p><form action="/team/remove?team={{ team.tcode }}&user=${d}" method="POST"><input type="submit" class="confirm-remove" value="Confirm"><input type="submit" style="margin-left: 10px" class="cancel-remove" value="Cancel"></form></div>`;
             $('.pop-up').html(html);
             $('.cancel-remove').click(function(e){
                 e.preventDefault();
@@ -37,9 +37,7 @@
         padding: 30px;
         width: 100%;
     }
-    .list-members{
-        margin-top: 20px;
-    }
+
     .member{
         display: grid;
         width: 500px;
@@ -106,7 +104,6 @@
         {% endfor %}
         {% endif %}
     {% endwith %}
-    <h2>Team Members</h2>
     <div class="list-members">
         {% for m in members %}
         <div class="member" id="{{ m.User.username }}">

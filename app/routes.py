@@ -217,7 +217,6 @@ def delete_team(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.username == team.tadmin:
         if request.method == 'POST':
-            TeamMember.query.filter_by(team_code=team.tcode).delete()
             Team.query.filter_by(tcode=team.tcode).delete()
             db.session.commit()
             message = "Team " + team.tname + " is successfully deleted and all the data associated with it was removed from our system."
@@ -279,6 +278,25 @@ def search_user():
                     'name': u.name,
                     'email': u.email
                 })
+
+    return jsonify(responseObject)
+
+@app.route('/users/members/', methods=['GET'])
+@login_required
+def search_member():
+    responseObject = []
+    user = request.args.get('user')
+    team = request.args.get('team')
+    search = "%" + user + "%"
+    user = User.query.filter(User.username.like(search)).all()
+    for u in user:
+        check_team = TeamMember.query.filter_by(team_code=team, musername=u.username).first()
+        if check_team is not None:
+            responseObject.append({
+                'username': u.username,
+                'name': u.name,
+                'email': u.email
+            })
 
     return jsonify(responseObject)
 
@@ -367,3 +385,14 @@ def get_private_recent():
         })
 
     return jsonify(payLoad)
+
+@app.route('/team/<tcode>/task/add/', methods=['GET', 'POST'])
+@login_required
+def add_task(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    if current_user.username == team.tadmin:
+        if request.method == 'POST':
+            return jsonify(data={'status': 200})
+        return render_template('add_tasks.html', team=team)
+    else:
+        return jsonify(data={'message': 'Access denied.'})

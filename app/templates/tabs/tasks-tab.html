@@ -4,13 +4,86 @@
 
 <script>
     $(document).ready(function(){
+        
         $('.tabs p').removeClass('active');
         $('.tasks-tab').addClass('active');
+
+        $('.task-create').click(function(){
+            $('#page-mask').css('display', 'block');
+            var url = "/team/{{ team.tcode }}/task/add";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('.pop-up').html(data);      
+                }
+            });
+            $('.pop-up').css('height', '630px');
+            $('.pop-up').css('display', 'block');
+        });
+
     });
 </script>
+<style>
+    .tasks-wrapper{
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 300px;
+        grid-template-areas: 'tasks-lt tasks-rt';
+    }
+    .tasks-left{
+        grid-area: tasks-lt;
+        padding: 30px;
+    }
+    .tasks-right{
+        grid-area: tasks-rt;
+        padding: 30px;
+        padding-left: 0px;
+    }
+    .task-item{
+        width: 100%;
+        min-height: 100px;
+        display: flex;
+        background: #fff;
+        margin-top: 10px;
+    }
+    .task-create{
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .task-create:hover{
+        background: #e5e5f1;
+    }
+    .create-image img{
+        height: 22px;
+        padding-right: 10px;
+    }
 
-<div style="padding: 30px;">
-    <h2>Under development</h2>
+</style>
+<div class="tasks-wrapper">
+    <div class="tasks-left">
+        <div class="task-item">
+
+        </div>
+    </div>
+    <div class="tasks-right">
+        <div class="task-create">
+            <div class="create-image">
+                <img src="/static/images/icons/plus.png">
+            </div>
+            <div>
+                Create task
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

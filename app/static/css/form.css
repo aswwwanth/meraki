@@ -34,8 +34,8 @@ input[type="text"],
 input[type="email"], 
 input[type="password"],
 textarea {
-    width: 350px;
-    max-width: 100%;
+    /* width: 350px; */
+    width: 100%;
     height: 50px;
     border: none;
     padding: 5px;
@@ -43,8 +43,9 @@ textarea {
 }
 
 textarea{
-    height: 190px;
+    height: 100px;
     resize: none;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 input[type="submit"], input[type="button"]{
@@ -78,7 +79,7 @@ input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled{
 }
 
 .textarea{
-    height: 200px;
+    height: 110px;
 }
 
 .st-form-errors{

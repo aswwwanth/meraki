@@ -180,6 +180,7 @@
                             });
                             $('.search-result').click(function(){
                                 $('#search-field').val('');
+                                $('.search-close-button').css('display', 'none');
                                 selectUser($(this).attr('id').substring(2));
                             });
                         }

@@ -45,6 +45,7 @@ input[type="text"]:focus{
 }
 .selected-users{
     height: 305px;
+    overflow: auto;
 }
 .selected-user{
     padding-top: 15px;

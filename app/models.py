@@ -37,7 +37,7 @@ class Team(db.Model):
 	
 class TeamMember(db.Model):
 
-	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode), primary_key=True)
+	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode, ondelete='CASCADE'), primary_key=True)
 	musername = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True)
 
 class PrivateChat(db.Model):
@@ -52,7 +52,7 @@ class TeamChat(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True, index=True)
 	sender_username = db.Column(db.String(256), db.ForeignKey(User.username), index=True)
-	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode))
+	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode, ondelete='CASCADE'))
 	message = db.Column(db.Text)
 	time = db.Column(db.DateTime)
 
@@ -67,3 +67,18 @@ class TeamChat(db.Model):
 # 	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode), primary_key=True)
 # 	recipient_username = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True, index=True)
 # 	last_read = db.Column(db.Integer, db.ForeignKey(TeamChat.id))
+
+class Tasks(db.Model):
+	task_code = db.Column(db.String(256), primary_key=True)
+	title = db.Column(db.String(256))
+	desc = db.Column(db.Text)
+	created_on = db.Column(db.DateTime)
+	deadline = db.Column(db.DateTime)
+
+class Milestones(db.Model):
+	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'), primary_key=True)
+	title = db.Column(db.String(256), primary_key=True)
+
+class TasksAssigned(db.Model):
+	user = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True)
+	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'), primary_key=True)

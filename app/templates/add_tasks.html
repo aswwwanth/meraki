@@ -1,0 +1,187 @@
+<script>
+    var assigned_users = [];
+    var team_id = "{{ team.id }}"
+    $(document).on('click', '.cancel-add-task', function(){
+        $('.pop-up').css('display', 'none');
+        $('.pop-up').html('');
+        $('.pop-up').css('height', '300px');
+        $('#page-mask').css('display', 'none'); 
+    });
+    
+    $('[type="date"]').prop('min', function(){
+        return new Date().toJSON().split('T')[0];
+    });
+
+    $(document).on('keyup', '#aid', function(){
+        search = $('#aid').val();
+        // console.log("Value = " + search);
+        if(search != ''){
+            url = "/users/members?user=" + search + "&team={{ team.tcode }}";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    // console.log(data);
+                    $('.autocomplete-items').empty();
+                    var ok = false;
+                    for(var i = 0; i < 5 && i < data.length; ++i){
+                        if(assigned_users.indexOf(data[i]['username']) == -1){
+                            $('.autocomplete-items').append(`<div class="autocomplete-item" id="${i}"><div>${data[i]['username']}</div></div>`);
+                            ok = true;
+                        }
+                    }
+                    if(!ok){
+                        $('.autocomplete-items').append(`<div class="autocomplete-item" id="-1"><div>No such user exits</div></div>`);
+                    }
+                    $('.autocomplete-item').click(function(){
+                        i = $(this).attr('id');
+                        if(i > -1){
+                            html = `<div class="assigned-user">@${data[i]['username']}</div>`;
+                            $('.assign-users').append(html);
+                            $('.autocomplete-items').empty();
+                            $('#aid').val("");
+                            assigned_users.push(data[i]['username']);
+                        }
+                        // console.log(selected_users);
+                    });
+
+                }
+            });
+        }
+        else
+            $('.autocomplete-items').empty();
+    });
+
+    $(document).on('click', '.close', function(){
+        parentid = $(this).parent().attr('id');
+        selected_users.splice(selected_users.indexOf(parentid));
+        $('#'+parentid).remove();
+        if(selected_users.length == 0)
+            $('#submit').attr("disabled", true);	
+    });
+
+    $(document).on('click', '#submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/team/add/{{ team.tcode }}/",
+            data: {users:selected_users, team: team_id},
+            success: function(data){
+                if(data.data['status'] == 200){
+                    $('.pop-up').html("<div style=\"width: 100%; height: 550px; display: flex; justify-content: center; align-items: center;\"><center><div><img src=\"/static/images/icons/tick.png\" height=\"100px\"><h2 style=\"margin-top: 10px;\">Added successfully</h2><input type=\"submit\" value=\"Close\" style=\"margin-top: 10px;\" class=\"close-popup\"></center></diV>")
+                    $('.close-popup').click(function(){
+                        window.location = '/team/{{ team.tcode }}/members/'; 
+                    });
+                }
+            }
+        });
+    });
+    function add_milestone(){
+        $('.add-milestone').click(function(){
+            $('.milestone:last img').attr("src", "/static/images/icons/close.png");
+            $('.milestone:last img').addClass('remove-milestone');
+            $('.milestone:last img').removeClass('add-milestone');
+            $('.milestone:last img').unbind();
+            $('.milestones').append(`<div class="milestone"><input type="text" class="milestone-field" placeholder="Milestone"><img src="/static/images/icons/plus.png" class="add-milestone" height="20px"></div>`);
+            add_milestone();
+            $('.remove-milestone').click(function(){
+                console.log($(this).parent());
+                $(this).parent().remove();
+            });
+        }); 
+    }
+    $('.add-milestone').click(function(){
+        $('.milestone:last img').attr("src", "/static/images/icons/close.png");
+        $('.milestone:last img').addClass('remove-milestone');
+        $('.milestone:last img').removeClass('add-milestone');
+        $('.milestone:last img').unbind();
+        $('.milestones').append(`<div class="milestone"><input type="text" class="milestone-field" placeholder="Milestone"><img src="/static/images/icons/plus.png" class="add-milestone" height="20px"></div>`);
+        add_milestone();
+        $('.remove-milestone').click(function(){
+            console.log($(this).parent());
+            $(this).parent().remove();
+        });
+    });
+</script>
+<style>
+    .assign-users{
+        margin-top: 5px;
+        min-height: 20px;
+    }
+    .assigned-user{
+        display: inline-flex;
+        background: #e5e5f1;
+        padding: 5px 10px 5px 10px;
+        margin-right: 3px;
+    }
+    .autocomplete {
+        position: relative;
+    }
+    .autocomplete-items{
+        position: absolute;
+        width: 600px;
+        cursor: pointer;
+        background-color: #fff;
+        box-shadow: 0 .2rem .4rem -.075rem rgba(0,0,0,.1);
+    }
+    .autocomplete-item div{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 5px;
+    }
+    .autocomplete-item:hover {
+        background-color: #e9e9e9;
+    }
+    .special-text input[type="text"]{
+        width: 600px;
+        background-color: #f1f1f1;
+        border-bottom: 3px solid transparent;
+    }
+    .special-text input[type="text"]:focus{
+        border-bottom: 3px solid blue;
+    }
+    .milestone{
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+    }
+    .milestone img{
+        margin-left: 8px;
+        flex: 0 0 20px;
+        cursor: pointer;
+    }
+</style>
+<div style="width: 100%; display: flex; justify-content: center; padding-top: 15px; padding-bottom: 15px;">
+    <div class="st-form" style="max-width: 600px;">
+        <h2>Add task</h2>
+        <form action="" method="post" novalidate autocomplete="off">
+            <div class="st-form-field">
+                <input type="text" placeholder="Task title" id="task-title">
+            </div>
+            <div class="st-form-field textarea" style="margin-bottom: 15px;">
+                <textarea name="task-desc" id="task-desc" placeholder="Task description"></textarea>
+            </div>
+            <div>
+                <label for="deadline">Deadline:</label>
+                <input type="date" id="deadline" name="deadline">
+            </div>
+            <p>Add milestones for the task</p>
+            <div class="milestones special-text">
+                <div class="milestone">
+                    <input type="text" class="milestone-field" placeholder="Milestone">
+                    <img src="/static/images/icons/plus.png" class="add-milestone" height="20px">
+                </div>
+            </div>
+            <p>Type a username, then assign the task to a user</p>
+            <div class="autocomplete special-text">
+                <input type="text" id="aid" placeholder="Username">
+                <div class="autocomplete-items"></div>
+            </div>
+            <div class="assign-users"></div>
+            <p><input type="submit" id="submit" value="Add">
+            <input style="margin-left: 10px;" type="button" class="cancel-add-task" value="Cancel">
+            </p>
+        </form>
+    
+    </div>
+</div>

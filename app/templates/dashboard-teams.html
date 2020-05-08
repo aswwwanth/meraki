@@ -5,7 +5,7 @@
 <script>
     $(document).ready(function(){
         $('.close-flash').click(function(){
-            $(this).parent().remove();
+            $(this).parent().parent().remove();
         });
         
         $('.dash-side div').removeClass('active');
@@ -60,6 +60,7 @@
         {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
+            <div style="padding: 25px;">
             <div class="flash-notifications" style="margin-bottom: 10px;">
                 <div class="flash-message">
                     {{ message|safe }}
@@ -67,6 +68,7 @@
                 <div class="close-flash">  
                     <img src="/static/images/icons/close.png">
                 </div>
+            </div>
             </div>
             {% endfor %}
             {% endif %}
