@@ -1,6 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request, flash, jsonify
 from functools import wraps
+from sqlalchemy import func
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import *
 from app.models import *
@@ -240,7 +241,8 @@ def team_chat(tcode):
 @is_member()
 def team_tasks(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
-    return render_template('tabs/tasks-tab.html', team=team)
+    tasks = Tasks.query.filter_by(team_code=tcode).order_by(Tasks.deadline).all()
+    return render_template('tabs/tasks-tab.html', team=team, tasks=tasks, datetimenow=datetime.datetime.now())
 
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/members/')
@@ -392,6 +394,34 @@ def add_task(tcode):
     team = Team.query.filter_by(tcode=tcode).first()
     if current_user.username == team.tadmin:
         if request.method == 'POST':
+            code = generateCode()
+            milestones = request.form.getlist('milestones[]')
+            assigned = request.form.getlist('assigned[]')
+            deadline = request.form['deadline']
+            task = Tasks(
+                task_code=code,
+                title=request.form['task-title'],
+                desc=request.form['task-desc'],
+                deadline=deadline,
+                team_code=tcode,
+                tag=request.form['task-tag'],
+                created_on=datetime.datetime.now()
+            )
+            db.session.add(task)
+            db.session.commit()
+            for m in milestones:
+                milestone = Milestones(
+                    task_code=code,
+                    title=m
+                )
+                db.session.add(milestone)
+            for a in assigned:
+                task_assign = TasksAssigned(
+                    user=a,
+                    task_code=code
+                )
+                db.session.add(task_assign)
+            db.session.commit()
             return jsonify(data={'status': 200})
         return render_template('add_tasks.html', team=team)
     else:

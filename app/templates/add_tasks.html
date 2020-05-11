@@ -14,7 +14,6 @@
 
     $(document).on('keyup', '#aid', function(){
         search = $('#aid').val();
-        // console.log("Value = " + search);
         if(search != ''){
             url = "/users/members?user=" + search + "&team={{ team.tcode }}";
             $.ajax({
@@ -24,10 +23,12 @@
                     // console.log(data);
                     $('.autocomplete-items').empty();
                     var ok = false;
-                    for(var i = 0; i < 5 && i < data.length; ++i){
+                    var k = 0
+                    for(var i = 0; k < 2 && i < data.length; ++i){
                         if(assigned_users.indexOf(data[i]['username']) == -1){
                             $('.autocomplete-items').append(`<div class="autocomplete-item" id="${i}"><div>${data[i]['username']}</div></div>`);
                             ok = true;
+                            ++k;
                         }
                     }
                     if(!ok){
@@ -36,13 +37,20 @@
                     $('.autocomplete-item').click(function(){
                         i = $(this).attr('id');
                         if(i > -1){
-                            html = `<div class="assigned-user">@${data[i]['username']}</div>`;
+                            html = `<div class="assigned-user" id="${data[i]['username']}">@${data[i]['username']}<img src="/static/images/icons/close.png" height="12px" style="margin-left: 3px;" class="close"></div>`;
                             $('.assign-users').append(html);
                             $('.autocomplete-items').empty();
                             $('#aid').val("");
                             assigned_users.push(data[i]['username']);
+                            $('.close').click(function(){
+                                console.log("TESTING");
+                                parentid = $(this).parent().attr('id');
+                                assigned_users.splice(assigned_users.indexOf(parentid));
+                                console.log(assigned_users);
+                                $('#'+parentid).remove();	
+                            });
                         }
-                        // console.log(selected_users);
+                        console.log(assigned_users);
                     });
 
                 }
@@ -52,25 +60,37 @@
             $('.autocomplete-items').empty();
     });
 
-    $(document).on('click', '.close', function(){
-        parentid = $(this).parent().attr('id');
-        selected_users.splice(selected_users.indexOf(parentid));
-        $('#'+parentid).remove();
-        if(selected_users.length == 0)
-            $('#submit').attr("disabled", true);	
-    });
-
     $(document).on('click', '#submit', function(e){
         e.preventDefault();
+        if($('#task-title').val() == ''){
+            $(".st-form-errors.task-title span").html("This field is required");
+            $(".st-form-errors.task-title").css('display', 'block');
+            return;
+        }
+        else{
+            $(".st-form-errors.task-title").css('display', 'none');
+        }
+        var milestones = []
+        $('.milestone-field').each(function(){
+            // console.log($(this).val());
+            milestones.push($(this).val());
+        });
         $.ajax({
             type: "POST",
-            url: "/team/add/{{ team.tcode }}/",
-            data: {users:selected_users, team: team_id},
+            url: "/team/{{ team.tcode }}/task/add/",
+            data: {
+                'assigned': assigned_users, 
+                'milestones': milestones,
+                'task-tag': $('#task-tag').val(),
+                'task-title': $('#task-title').val(),
+                'task-desc': $('#task-desc').val(),
+                'deadline': $('#deadline').val()
+            },
             success: function(data){
                 if(data.data['status'] == 200){
-                    $('.pop-up').html("<div style=\"width: 100%; height: 550px; display: flex; justify-content: center; align-items: center;\"><center><div><img src=\"/static/images/icons/tick.png\" height=\"100px\"><h2 style=\"margin-top: 10px;\">Added successfully</h2><input type=\"submit\" value=\"Close\" style=\"margin-top: 10px;\" class=\"close-popup\"></center></diV>")
+                    $('.pop-up').html("<div style=\"width: 100%; height: 710px; display: flex; justify-content: center; align-items: center;\"><center><div><img src=\"/static/images/icons/tick.png\" height=\"100px\"><h2 style=\"margin-top: 10px;\">Added successfully</h2><input type=\"submit\" value=\"Close\" style=\"margin-top: 10px;\" class=\"close-popup\"></center></diV>")
                     $('.close-popup').click(function(){
-                        window.location = '/team/{{ team.tcode }}/members/'; 
+                        window.location = '/team/{{ team.tcode }}/tasks/'; 
                     });
                 }
             }
@@ -108,11 +128,16 @@
         margin-top: 5px;
         min-height: 20px;
     }
+    .close{
+        cursor: pointer;
+    }
     .assigned-user{
         display: inline-flex;
+        align-items: center;
         background: #e5e5f1;
         padding: 5px 10px 5px 10px;
         margin-right: 3px;
+        margin-top: 3px;
     }
     .autocomplete {
         position: relative;
@@ -158,6 +183,10 @@
             <div class="st-form-field">
                 <input type="text" placeholder="Task title" id="task-title">
             </div>
+            <div class="st-form-field">
+                <input type="text" placeholder="Task tag" id="task-tag">
+            </div>
+            <div class="st-form-errors task-title"><span></span></div>
             <div class="st-form-field textarea" style="margin-bottom: 15px;">
                 <textarea name="task-desc" id="task-desc" placeholder="Task description"></textarea>
             </div>
