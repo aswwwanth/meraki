@@ -158,12 +158,14 @@
         {% endfor %}
     </div>
     <div class="tasks-right">
+        {% if current_user.username == team.tadmin %}
         <div class="task-create">
             <div class="create-image">
                 <img src="/static/images/icons/plus.png">
             </div>
             <div>Create task</div>
         </div>
+        {% endif %}
     </div>
 </div>
 
