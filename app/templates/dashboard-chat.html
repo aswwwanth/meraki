@@ -197,6 +197,11 @@
             }
         });
 
+        $('#send-message').click(function(e){
+            e.preventDefault();
+            sendMessage();    
+        });
+
         $('.search-close-button').click(function(){
             removeResults();
             $('#search-field').val('');
