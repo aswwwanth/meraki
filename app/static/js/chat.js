@@ -7,7 +7,7 @@ function addMessage(data, username){
     if(data.username == username)
         message_processed = `<div class="message right-message"><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
     else
-        message_processed = `<div class="message left-message"><div class="message-profile"><img src="/static/images/icons/user.png"></div><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
+        message_processed = `<div class="message left-message"><div class="message-profile"><img src="/static/images/profile/${data['username'].substr(0, 2).toUpperCase()}.png"></div><div class="message-container"><div class="message-user">${data.username}</div><div class="message-content">${data.message}</div><div class="message-time">${data.time}</div></div></div>`;
     $('.chat-messages').append(message_processed);
     scrollToBottom();
 }

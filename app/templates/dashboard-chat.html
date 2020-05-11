@@ -89,7 +89,7 @@
 
         // function to add user thread to recents
         function addUserThread(data, mode){
-            user_thread = `<div class="user user-thread" id="id${data['username']}"><div class="user-image"><img src="/static/images/icons/user.png"></div><div class="user-info"><span class="user-username">${data['username']}</span><span class="user-last-message">${data['message']}</span></div><div class="user-date">${data['time']}</div></div>`;
+            user_thread = `<div class="user user-thread" id="id${data['username']}"><div class="user-image"><img src="/static/images/profile/${data['username'].substr(0, 2).toUpperCase()}.png"></div><div class="user-info"><span class="user-username">${data['username']}</span><span class="user-last-message">${data['message']}</span></div><div class="user-date">${data['time']}</div></div>`;
             if(mode == 0)
                 $('.users').append(user_thread);
             else 
@@ -141,6 +141,7 @@
                         data = data.data;
                         $('.header-user-name').html(data['name']);
                         $('.header-username').html('@' + data['username']);
+                        $('.header-image').html(`<img src="/static/images/profile/${data['username'].substr(0, 2).toUpperCase()}.png">`)
                         loadMessages(data['username']);
                     }
                     else
@@ -175,7 +176,7 @@
                         clearResults();
                         if(data.length != 0){
                             $.each(data, function(x, values){
-                                var search_result = `<div class="user search-result" id="id${values['username']}"><div class="user-image"><img src="/static/images/icons/user.png"></div><div class="user-info"><span class="user-username">${values['username']}</span><span class="user-last-message">Send a message</span></div></div>`;
+                                var search_result = `<div class="user search-result" id="id${values['username']}"><div class="user-image"><img src="/static/images/profile/${values['username'].substr(0, 2).toUpperCase()}.png"></div><div class="user-info"><span class="user-username">${values['username']}</span><span class="user-last-message">Send a message</span></div></div>`;
                                 $('.users').append(search_result);
                             });
                             $('.search-result').click(function(){
@@ -272,7 +273,7 @@
     }
 
     .user-image img, .header-image img{
-        height: 25px;
+        height: 33px;
     }
 
     .user-info{
@@ -330,7 +331,7 @@
         overflow-y: auto;
     }
 
-    .search-close-button{
+    .search-close-button, .search-close-button:hover{
         border: none;
         background-color: #d1d1d1;
         height: 40px;
@@ -343,7 +344,6 @@
         background-position: center;
         background-repeat: no-repeat;
     }
-
     .hide{
         display: none;
     }
@@ -353,7 +353,7 @@
     <div class="dash-chat-left">
         <div class="search-users">
             <input type="text" placeholder="Search" id="search-field">
-            <button class="search-close-button"></button>
+            <div class="search-close-button"></div>
         </div>
         <div class="users">
             <!-- <div class="user user-thread" id="username">
