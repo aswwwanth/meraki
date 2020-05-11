@@ -516,7 +516,7 @@ def get_team_messages(tcode):
 @login_required
 def get_private_messages(username):
 
-    messages = db.session.query(PrivateChat).filter(((PrivateChat.sender_username==current_user.username) | (PrivateChat.recipient_username==current_user.username)) & ((PrivateChat.sender_username==username) | (PrivateChat.recipient_username==username))).order_by(PrivateChat.time.asc()).all()
+    messages = db.session.query(PrivateChat).filter(((PrivateChat.sender_username==current_user.username) & (PrivateChat.recipient_username==username)) | ((PrivateChat.sender_username==username) & (PrivateChat.recipient_username==current_user.username))).order_by(PrivateChat.time.asc()).all()
     
     payLoad = []
     for m in messages:

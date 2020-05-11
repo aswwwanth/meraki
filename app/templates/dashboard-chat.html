@@ -40,6 +40,7 @@
             if(data['username'] != '{{ current_user.username }}' && room != data['username']){
                 $('#id' + data['username']).remove();
                 addUserThread(data, 1);
+                $('.user-thread').unbind();
                 $('.user-thread').click(function(){
                     selectUser($(this).attr('id').substring(2));
                 });
@@ -66,6 +67,7 @@
             }
             $(select).remove();
             addUserThread(data, 1);
+            $('.user-thread').unbind();
             $('.user-thread').click(function(){
                 selectUser($(this).attr('id').substring(2));
             });
@@ -115,6 +117,7 @@
                 // event listeners for send message button
                 $('#send-message').click(function(e){
                     e.preventDefault();
+                    sendMessage();    
                 });
                 
                 $("#message-field").on('keyup', function (e) {
@@ -156,6 +159,7 @@
             success: function (data) {
                 $.each(data, function(key, value){
                     addUserThread(value, 0);
+                    $('.user-thread').unbind();
                     $('.user-thread').click(function(){
                         selectUser($(this).attr('id').substring(2));
                     });
@@ -196,11 +200,6 @@
                 removeResults();
                 $('.search-close-button').css('display', 'none');
             }
-        });
-
-        $('#send-message').click(function(e){
-            e.preventDefault();
-            sendMessage();    
         });
 
         $('.search-close-button').click(function(){
