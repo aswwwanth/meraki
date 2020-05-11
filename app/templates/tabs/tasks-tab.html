@@ -42,7 +42,7 @@
     }
     .task-item{
         width: 100%;
-        height: 115px;
+        height: 130px;
         display: flex;
         align-items: center;
         background: #fff;
@@ -55,7 +55,7 @@
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: 20px;
     }
 
     .info-blocks{
@@ -114,7 +114,7 @@
                             <span style="background: #4e4f4e;">{{ task.tag }}</span>
                             {% if task.status == True %}
                                 <span style="background: #006100">Status: Completed</span>
-                            {% elif datetimenow < task.deadline %}
+                            {% elif datetimenow.date() <= task.deadline.date() %}
                                 <span style="background: #009400">Status: Ongoing</span>
                             {% else %}
                                 <span style="background: #bf0016">Status: Pending</span>  

@@ -90,7 +90,34 @@ def dashboard_chat():
 @app.route('/dashboard/tasks/')
 @login_required
 def dashboard_tasks():
-    return render_template('dashboard-tasks.html', title="Tasks");
+    
+    tasks = db.session.query(Tasks, TasksAssigned, Team).filter(Team.tcode==Tasks.team_code, TasksAssigned.user==current_user.username, Tasks.task_code==TasksAssigned.task_code).order_by(Tasks.deadline).all()
+    
+    tasks_data = {}
+    tasks_completed = 0
+    tasks_pending = 0
+    tasks_created = 0
+    
+    for task in tasks:
+        if task.Tasks.deadline not in tasks_data:
+            tasks_data[task.Tasks.deadline] = []
+        tasks_data[task.Tasks.deadline].append((task.Tasks, task.Team.tname))
+        if task.Tasks.task_admin == current_user.username:
+            tasks_created += 1
+        if task.Tasks.status == False:
+            tasks_pending += 1
+        else:
+            tasks_completed += 1
+
+    return render_template(
+        'dashboard-tasks.html', 
+        title="Tasks", 
+        tasks=tasks_data, 
+        datetimenow=datetime.datetime.now(),
+        tasks_pending=tasks_pending,
+        tasks_completed=tasks_completed,
+        tasks_created=tasks_created
+    );
 
 @app.route('/team/create/', methods=['GET', 'POST'])
 @login_required
@@ -280,7 +307,7 @@ def update_milestone(tcode,task_code, mid):
 
     progress = TaskProgressLog(
         task_code=task_code,
-        log="\"" + milestone.title + "\" " + log,
+        log="<b>\"" + milestone.title + "\"</b> " + log,
         log_by=current_user.username,
         time=datetime.datetime.now()
     )
@@ -347,7 +374,7 @@ def add_task(tcode):
                 )
                 milestone_progress = TaskProgressLog(
                     task_code=code,
-                    log="Milestone \"" + m + "\" added ",
+                    log="Milestone <b>\"" + m + "\"</b> added ",
                     log_by=current_user.username,
                     time=datetimenow
                 )
@@ -361,7 +388,7 @@ def add_task(tcode):
                 )
                 assign_progress = TaskProgressLog(
                     task_code=code,
-                    log="Task assigned to @" + a + " ",
+                    log="Task assigned to <b>@" + a + "</b> ",
                     log_by=current_user.username,
                     time=datetimenow
                 )

@@ -182,6 +182,7 @@
 
     .task-progress span{
         margin-bottom: 5px;
+        font-size: 14px;
         background: #fff;
         padding: 10px;
         border-radius: 4px;
@@ -217,7 +218,7 @@
                 <div>
                     {% if task.status == True %}
                         <span class="info-block" style="background: #006100">Status: Completed</span>
-                    {% elif datetimenow < task.deadline %}
+                    {% elif datetimenow.date() <= task.deadline.date() %}
                         <span class="info-block" style="background: #009400">Status: Ongoing</span>
                     {% else %}
                         <span class="info-block" style="background: #bf0016">Status: Pending</span>  
@@ -269,7 +270,7 @@
         <div class="task-progress">
             <h3 style="margin-bottom: 10px; ">Task progress</h3>
             {% for tp in task_progress %}
-                <span>{{ tp.log }} by @{{ tp.log_by }} at {{ tp.time.strftime("%d %b %Y %I:%M %p") }}</span>
+                <span>{{ tp.log|safe }} by <b>@{{ tp.log_by }}</b> at <b>{{ tp.time.strftime("%d %b %Y %I:%M %p") }}</b></span>
             {% endfor %}
         </div>
     </div>
