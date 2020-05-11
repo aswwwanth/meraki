@@ -70,19 +70,30 @@ class TeamChat(db.Model):
 
 class Tasks(db.Model):
 	task_code = db.Column(db.String(256), primary_key=True)
+	task_admin = db.Column(db.String(256), db.ForeignKey(User.username))
 	team_code = db.Column(db.String(256), db.ForeignKey(Team.tcode, ondelete='CASCADE'))
 	title = db.Column(db.String(256))
 	tag = db.Column(db.String(256))
 	desc = db.Column(db.Text)
 	created_on = db.Column(db.DateTime)
 	deadline = db.Column(db.DateTime)
+	completed_on = db.Column(db.DateTime)
+	completed_by = db.Column(db.String(256), db.ForeignKey(User.username))
 	status = db.Column(db.Boolean, default=False)
 
 class Milestones(db.Model):
-	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'), primary_key=True)
-	title = db.Column(db.String(256), primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True, index=True)
+	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'))
+	title = db.Column(db.String(256))
 	status = db.Column(db.Boolean, default=False)
 
 class TasksAssigned(db.Model):
 	user = db.Column(db.String(256), db.ForeignKey(User.username), primary_key=True)
 	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'), primary_key=True)
+
+class TaskProgressLog(db.Model):
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True, index=True)
+	task_code = db.Column(db.String(256), db.ForeignKey(Tasks.task_code, ondelete='CASCADE'))
+	log_by = db.Column(db.String(256), db.ForeignKey(User.username))
+	time = db.Column(db.DateTime)
+	log = db.Column(db.Text)

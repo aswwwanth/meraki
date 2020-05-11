@@ -1,0 +1,278 @@
+{% extends "team-view.html" %}
+
+{% block righttab %}
+
+<script>
+    $(document).ready(function(){
+        
+        $('.tabs p').removeClass('active');
+        $('.tasks-tab').addClass('active');
+
+        $('.task-create').click(function(){
+            $('#page-mask').css('display', 'block');
+            var url = "/team/{{ team.tcode }}/task/add";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('.pop-up').html(data);      
+                }
+            });
+            $('.pop-up').css('height', '710px');
+            $('.pop-up').css('display', 'block');
+        });
+
+        $('.milestone-box').change(function(){
+            var id = $(this).attr('id').replace('milestone', '');
+            if(this.checked){
+                $.ajax({
+                    type: "POST",
+                    url: `/team/{{ team.tcode }}/task/{{ task.task_code }}/update/milestone/${id}/`,
+                    data: {
+                        'state': 1, 
+                    },
+                });
+            }
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: `/team/{{ team.tcode }}/task/{{ task.task_code }}/update/milestone/${id}/`,
+                    data: {
+                        'state': 0, 
+                    },
+                });
+            }
+        });
+
+        $('.mark-complete').click(function(){
+            $.ajax({
+                type: "POST",
+                url: `/team/{{ team.tcode }}/task/{{ task.task_code }}/update/`,
+                success: function(data){
+                    $('.task-action').html(`<span>${data['message']}</span>`)
+                }
+            });
+        });
+
+    });
+</script>
+<style>
+    .tasks-wrapper{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    .task-details{
+        width: 100%;
+        max-width: 1000px;
+        display: grid;
+        grid-template-columns: auto 250px;
+        grid-template-rows: 40px auto auto auto;
+        grid-template-areas: 
+        "back-to-dash back-to-dash"
+        "task-details-lt task-details-rt"
+        "task-milestones task-details-rt"
+        "task-progress task-progress";
+        padding: 15px;
+    }
+    .task-details-left{
+        grid-area: task-details-lt;
+    }
+    .task-details-right{
+        grid-area: task-details-rt;
+        width: 100%;
+        display: flex;
+    }
+    .task-details-right div{
+        margin-top: 10px;
+    }
+    .info-block{
+        display: inline-block;
+        border-radius: 4px; 
+        color: #fff;
+        padding: 2px 10px 2px 10px; 
+        margin-right: 10px;
+    }
+    .task-milestones{
+        grid-area: task-milestones;
+        margin-top: 20px;
+    }
+    .grid-back{
+        grid-area: back-to-dash;
+    }
+    .assignee{
+        display: inline-flex;
+        align-items: center;
+        background: #e5e5f1;
+        padding: 5px 10px 5px 10px;
+        margin-right: 3px;
+        margin-top: 3px;
+    }
+
+    .checkbox {
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #fff;
+    }
+
+    .checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+
+    .checkbox input:checked ~ .checkmark {
+        background-color: #009c0a;
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .checkbox .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .task-progress{
+        grid-area: task-progress;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .task-progress span{
+        margin-bottom: 5px;
+        background: #fff;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .task-action{
+        margin-top: 20px;
+    }
+    .task-action button{
+        height: 30px;
+        font-size: 16px;
+        padding: 2px;
+        width: 220px;
+        background: #006100;
+        border: 2px solid #006100;
+    }
+</style>
+<div class="tasks-wrapper">
+    <div class="task-details">
+        <a href="/team/{{ team.tcode }}/tasks/" class="grid-back">
+            <div class="back-to-dash" style="margin-bottom: 0;">
+                <img src="/static/images/icons/back.png" height="10px">
+                <p>All tasks</p>
+            </div>
+        </a>
+        <div class="task-details-left">
+            <h2>{{ task.title }}</h2>
+            <span class="info-block" style="background: #4e4f4e; margin-top: 10px;">Description</span>
+            <div>{{ task.desc }}</div>
+        </div>
+        <div class="task-details-right">
+            <div>
+                <div><span class="info-block" style="background: #4e4f4e;">{{ task.tag }}</span></div>
+                <div>
+                    {% if task.status == True %}
+                        <span class="info-block" style="background: #006100">Status: Completed</span>
+                    {% elif datetimenow < task.deadline %}
+                        <span class="info-block" style="background: #009400">Status: Ongoing</span>
+                    {% else %}
+                        <span class="info-block" style="background: #bf0016">Status: Pending</span>  
+                    {% endif %}
+                </div>
+                {% if task.status == True %}
+                <div>
+                    <span class="info-block" style="background: #006100">Completed by @{{ task.completed_by }}</span>
+                </div>
+                <div>
+                    <span class="info-block" style="background: #006100">Completed by @{{ task.completed_on.strftime("%d %b %Y") }}</span>
+                </div>
+                {% endif %}
+                <div style="display: flex; align-items: center;"><img src="/static/images/icons/deadline.png" height="20px" style="margin-right: 10px;">{{ task.deadline.strftime("%d %b %Y") }}</div>
+                <div>Added on: {{ task.created_on.strftime("%d %b %Y") }}</div>
+                <div>Added by: @{{ task.task_admin }}</div>
+                <div>Assignees:<br>
+                    {% for assignee in assignees %}
+                        <span class="assignee">@{{ assignee.user }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="task-milestones">
+            <h3>Milestones</h3>
+            {% if milestones is not none %}
+                <p>Milestones specified for the task</p>
+            {% endif %}
+            <div style="margin-top: 15px; margin-left: 20px;">
+                {% for milestone in milestones %}
+                    <label class="checkbox">{{ milestone.title }}
+                        {% if (milestone.status == True and task.status == False) and (current_user.username in assignees or current_user.username == task.task_admin) %}
+                        <input type="checkbox" class="milestone-box" id="milestone{{ milestone.id }}" checked="checked">
+                        {% elif (task.status == False) and (current_user.username in assignees or current_user.username == task.task_admin) %}
+                        <input type="checkbox" class="milestone-box" id="milestone{{ milestone.id }}">
+                        {% else %}
+                        <input type="checkbox" class="milestone-box" id="milestone{{ milestone.id }}" disabled>
+                        {% endif %}
+                        <span class="checkmark"></span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% if (current_user.username in assignees or current_user.username == task.task_admin) and task.status == False %}
+            <div class="task-action">
+                <button class="mark-complete">Mark task as completed</button>
+            </div>
+            {% endif %}
+        </div>
+        <div class="task-progress">
+            <h3 style="margin-bottom: 10px; ">Task progress</h3>
+            {% for tp in task_progress %}
+                <span>{{ tp.log }} by @{{ tp.log_by }} at {{ tp.time.strftime("%d %b %Y %I:%M %p") }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

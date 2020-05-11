@@ -244,6 +244,135 @@ def team_tasks(tcode):
     tasks = Tasks.query.filter_by(team_code=tcode).order_by(Tasks.deadline).all()
     return render_template('tabs/tasks-tab.html', team=team, tasks=tasks, datetimenow=datetime.datetime.now())
 
+@app.route('/team/<tcode>/tasks/<task_code>/')
+@login_required
+@is_member()
+def team_tasks_details(tcode, task_code):
+    team = Team.query.filter_by(tcode=tcode).first()
+    task = Tasks.query.filter_by(task_code=task_code).first()
+    milestones = Milestones.query.filter_by(task_code=task_code).order_by(Milestones.id).all()
+    assignees = TasksAssigned.query.filter_by(task_code=task_code).all()
+    task_progress = TaskProgressLog.query.filter_by(task_code=task_code).order_by(TaskProgressLog.time).all()
+    return render_template(
+        'tabs/tasks-tab-details.html',
+        team=team, 
+        task=task, 
+        milestones=milestones, 
+        assignees =assignees, 
+        datetimenow=datetime.datetime.now(),
+        task_progress=task_progress
+    )
+
+@app.route('/team/<tcode>/task/<task_code>/update/milestone/<mid>/', methods=['POST'])
+@login_required
+@is_member()
+def update_milestone(tcode,task_code, mid):
+    
+    milestone = Milestones.query.filter_by(id=mid).first()
+    log = "Nothing"
+    
+    if(request.form['state'] == '1'):
+        milestone.status = True
+        log = " marked as complete"
+    else:
+        milestone.status = False
+        log = " was reopened"
+
+    progress = TaskProgressLog(
+        task_code=task_code,
+        log="\"" + milestone.title + "\" " + log,
+        log_by=current_user.username,
+        time=datetime.datetime.now()
+    )
+    db.session.add(progress)
+    db.session.commit()
+
+    return jsonify({'status': 200})
+
+@app.route('/team/<tcode>/task/<task_code>/update/', methods=['POST'])
+@login_required
+@is_member()
+def update_task_progress(tcode,task_code):
+    
+    datetimenow = datetime.datetime.now()
+    task = Tasks.query.filter_by(task_code=task_code).first()
+    task.status = True
+    task.completed_on = datetimenow
+    task.completed_by = current_user.username
+    progress = TaskProgressLog(
+        task_code=task_code,
+        log="Task completed ",
+        log_by=current_user.username,
+        time=datetimenow
+    )
+    db.session.add(progress)
+    db.session.commit()
+
+    return jsonify({'status': 200, 'message': 'Task completed by ' + current_user.username})
+
+@app.route('/team/<tcode>/task/add/', methods=['GET', 'POST'])
+@login_required
+def add_task(tcode):
+    team = Team.query.filter_by(tcode=tcode).first()
+    if current_user.username == team.tadmin:
+        if request.method == 'POST':
+            code = generateCode()
+            milestones = request.form.getlist('milestones[]')
+            assigned = request.form.getlist('assigned[]')
+            deadline = request.form['deadline']
+            datetimenow = datetime.datetime.now()
+            task = Tasks(
+                task_code=code,
+                task_admin=current_user.username,
+                title=request.form['task-title'],
+                desc=request.form['task-desc'],
+                deadline=deadline,
+                team_code=tcode,
+                tag=request.form['task-tag'],
+                created_on=datetimenow
+            )
+            db.session.add(task)
+            db.session.commit()
+            progress = TaskProgressLog(
+                task_code=code,
+                log="Task created ",
+                log_by=current_user.username,
+                time=datetimenow
+            )
+            db.session.add(progress)
+            for m in milestones:
+                milestone = Milestones(
+                    task_code=code,
+                    title=m
+                )
+                milestone_progress = TaskProgressLog(
+                    task_code=code,
+                    log="Milestone \"" + m + "\" added ",
+                    log_by=current_user.username,
+                    time=datetimenow
+                )
+                db.session.add(milestone_progress)
+                db.session.add(milestone)
+                
+            for a in assigned:
+                task_assign = TasksAssigned(
+                    user=a,
+                    task_code=code
+                )
+                assign_progress = TaskProgressLog(
+                    task_code=code,
+                    log="Task assigned to @" + a + " ",
+                    log_by=current_user.username,
+                    time=datetimenow
+                )
+                db.session.add(assign_progress)
+                db.session.add(task_assign)
+            db.session.commit()
+            return jsonify(data={'status': 200})
+        return render_template('add_tasks.html', team=team)
+    else:
+        return jsonify(data={'message': 'Access denied.'})
+
 @app.route('/team/<tcode>/')
 @app.route('/team/<tcode>/members/')
 @login_required
@@ -387,42 +516,3 @@ def get_private_recent():
         })
 
     return jsonify(payLoad)
-
-@app.route('/team/<tcode>/task/add/', methods=['GET', 'POST'])
-@login_required
-def add_task(tcode):
-    team = Team.query.filter_by(tcode=tcode).first()
-    if current_user.username == team.tadmin:
-        if request.method == 'POST':
-            code = generateCode()
-            milestones = request.form.getlist('milestones[]')
-            assigned = request.form.getlist('assigned[]')
-            deadline = request.form['deadline']
-            task = Tasks(
-                task_code=code,
-                title=request.form['task-title'],
-                desc=request.form['task-desc'],
-                deadline=deadline,
-                team_code=tcode,
-                tag=request.form['task-tag'],
-                created_on=datetime.datetime.now()
-            )
-            db.session.add(task)
-            db.session.commit()
-            for m in milestones:
-                milestone = Milestones(
-                    task_code=code,
-                    title=m
-                )
-                db.session.add(milestone)
-            for a in assigned:
-                task_assign = TasksAssigned(
-                    user=a,
-                    task_code=code
-                )
-                db.session.add(task_assign)
-            db.session.commit()
-            return jsonify(data={'status': 200})
-        return render_template('add_tasks.html', team=team)
-    else:
-        return jsonify(data={'message': 'Access denied.'})

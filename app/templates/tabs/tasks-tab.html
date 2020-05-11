@@ -106,28 +106,30 @@
 <div class="tasks-wrapper">
     <div class="tasks-left">
         {% for task in tasks %}
-            <div class="task-item">
-                <div class="task-item-info">
-                    <h2>{{ task.title }}</h2>
-                    <div class="info-blocks">
-                        <span style="background: #4e4f4e;">{{ task.tag }}</span>
-                        {% if task.status == True %}
-                            <span style="background: #006100">Status: Completed</span>
-                        {% elif datetimenow < task.deadline %}
-                            <span style="background: #009400">Status: Ongoing</span>
-                        {% else %}
-                            <span style="background: #bf0016">Status: Pending</span>  
-                        {% endif %}    
+            <a href="/team/{{ team.tcode }}/tasks/{{ task.task_code }}/">
+                <div class="task-item">
+                    <div class="task-item-info">
+                        <h2>{{ task.title }}</h2>
+                        <div class="info-blocks">
+                            <span style="background: #4e4f4e;">{{ task.tag }}</span>
+                            {% if task.status == True %}
+                                <span style="background: #006100">Status: Completed</span>
+                            {% elif datetimenow < task.deadline %}
+                                <span style="background: #009400">Status: Ongoing</span>
+                            {% else %}
+                                <span style="background: #bf0016">Status: Pending</span>  
+                            {% endif %}    
+                        </div>
+                        <div>
+                            <span>Added on: {{ task.created_on.strftime("%d %b %Y") }}</span>
+                        </div>
                     </div>
-                    <div>
-                        <span>Added on: {{ task.created_on.strftime("%d %b %Y") }}</span>
+                    <div class="task-item-deadline">
+                        <img src="/static/images/icons/deadline.png">
+                        <p>{{ task.deadline.strftime("%d %b %Y") }}</p>
                     </div>
                 </div>
-                <div class="task-item-deadline">
-                    <img src="/static/images/icons/deadline.png">
-                    <p>{{ task.deadline.strftime("%d %b %Y") }}</p>
-                </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
     <div class="tasks-right">

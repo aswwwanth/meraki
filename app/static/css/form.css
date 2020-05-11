@@ -30,6 +30,7 @@
 ::-moz-focus-inner {border:0;}
 
 
+button,
 input[type="text"], 
 input[type="email"], 
 input[type="password"],
@@ -48,7 +49,7 @@ textarea{
     font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
-input[type="submit"], input[type="button"]{
+button, input[type="submit"], input[type="button"]{
     border: 2px solid #000;
     background: #000;
     color: #fff;
@@ -58,12 +59,12 @@ input[type="submit"], input[type="button"]{
     cursor: pointer;
 }
 
-input[type="submit"]:disabled, input[type="button"]:disabled{
+button:hover:disabled, input[type="submit"]:disabled, input[type="button"]:disabled{
     border: grey;
     background: grey;
 }
 
-input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled{
+button:hover:enabled, input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled{
     color: #000;
     background: #fff;
 }
