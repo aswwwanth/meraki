@@ -34,7 +34,7 @@
                         i = $(this).attr('id');
                         if(i > -1){
                             $('#submit').attr("disabled", false);
-                            html = "<div class=\"selected-user\" id=\"" + data[i]['username'] + "\"><div class=\"image\"><img src=\"/static/images/icons/user.png\"></div><div class=\"name\"><p>" + data[i]['name'] + "</p><p>" + data[i]['email'] + "</p></div><div class=\"close\"><img src=\"/static/images/icons/close.png\"></div></div>";
+                            html = `<div class="selected-user" id="${data[i]['username']}"><div class="image"><img src="/static/images/profile/${data[i]['username'].substr(0, 2).toUpperCase()}.png"></div><div class="name"><p>${data[i]['name']}</p><p>${data[i]['email']}</p></div><div class="close"><img src="/static/images/icons/close.png"></div></div>`;
                             $('.selected-users').append(html);
                             $('.autocomplete-items').empty();
                             $('#mid').val("");
