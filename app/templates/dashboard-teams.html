@@ -87,8 +87,10 @@
                 {% for item in teams %}
                     <a href="/team/{{ item.Team.tcode }}/"">
                         <div class="team-card">
-                            {% set name = item.Team.tname.split(' ') %}
-                            <img src="/static/images/teams/{% if name|length > 1 %}{{name[0][0]|upper}}{{name[1][0]|upper}}{% else %}{{name[0][0]|upper}}{% endif %}.png" height="70px" style="margin-bottom: 10px;">
+                            <div class="team-card-img">
+                                {% set name = item.Team.tname.split(' ') %}
+                                <img src="/static/images/teams/{% if name|length > 1 %}{{name[0][0]|upper}}{{name[1][0]|upper}}{% else %}{{name[0][0]|upper}}{% endif %}.png" height="70px" style="margin-bottom: 10px;">
+                            </div>
                             <span class="team-name"><center>{{ item.Team.tname }}</center></span>
                         </div>
                     </a>  
