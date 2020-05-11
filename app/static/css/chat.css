@@ -59,6 +59,9 @@
 
 .message-sender button:hover{
     background-image: url('/static/images/icons/send(b).png');
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .chat-messages{
