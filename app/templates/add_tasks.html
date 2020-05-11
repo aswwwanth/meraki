@@ -73,7 +73,8 @@
         var milestones = []
         $('.milestone-field').each(function(){
             // console.log($(this).val());
-            milestones.push($(this).val());
+            if($(this).val() != "")
+                milestones.push($(this).val());
         });
         $.ajax({
             type: "POST",

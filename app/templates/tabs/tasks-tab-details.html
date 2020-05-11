@@ -54,6 +54,19 @@
             });
         });
 
+        $('.delete-button').click(function(){
+            $('#page-mask').css('display', 'block');
+            var url = "/team/{{ team.tcode }}/tasks/{{ task.task_code }}/delete/";
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('.pop-up').html(data);      
+                }
+            });
+            $('.pop-up').css('display', 'block');
+        });
+
     });
 </script>
 <style>
@@ -190,13 +203,25 @@
     .task-action{
         margin-top: 20px;
     }
-    .task-action button{
+    .task-action button, .delete-button{
         height: 30px;
         font-size: 16px;
         padding: 2px;
         width: 220px;
         background: #006100;
         border: 2px solid #006100;
+    }
+    .task-action button:hover{
+        color: #006100 !important;
+    }
+    .delete-button{
+        width: 150px;
+        background: #bf0016;
+        border: 2px solid #bf0016;
+    }
+    .delete-button:hover{
+        background: transparent !important;
+        color: #bf0016 !important;
     }
 </style>
 <div class="tasks-wrapper">
@@ -240,6 +265,11 @@
                         <span class="assignee">@{{ assignee.user }}</span>
                     {% endfor %}
                 </div>
+                {% if current_user.username == task.task_admin %}
+                <div>
+                    <button class="delete-button">Delete task</button>
+                </div>
+                {% endif %}
             </div>
         </div>
         <div class="task-milestones">

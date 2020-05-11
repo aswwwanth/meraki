@@ -395,8 +395,25 @@ def add_task(tcode):
                 db.session.add(assign_progress)
                 db.session.add(task_assign)
             db.session.commit()
+            message = "Task " + request.form['task-title'] + " is successfully added"
+            flash(message)
             return jsonify(data={'status': 200})
         return render_template('add_tasks.html', team=team)
+    else:
+        return jsonify(data={'message': 'Access denied.'})
+
+@app.route('/team/<tcode>/tasks/<task_code>/delete/', methods=['GET', 'POST'])
+@login_required
+def delete_task(tcode, task_code):
+    task = Tasks.query.filter_by(task_code=task_code).first()
+    if current_user.username == task.task_admin:
+        if request.method == 'POST':
+            Tasks.query.filter_by(task_code=task_code).delete()
+            db.session.commit()
+            message = "Task " + task.title + " is successfully deleted and all the data associated with it was removed from our system."
+            flash(message)
+            return redirect(url_for('team_tasks', tcode=tcode))
+        return render_template('delete_task.html', task=task, tcode=tcode)
     else:
         return jsonify(data={'message': 'Access denied.'})
 

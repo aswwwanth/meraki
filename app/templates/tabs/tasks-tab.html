@@ -22,6 +22,10 @@
             $('.pop-up').css('display', 'block');
         });
 
+        $('.close-flash').click(function(){
+            $(this).parent().parent().remove();
+        });
+
     });
 </script>
 <style>
@@ -102,7 +106,28 @@
         height: 22px;
         padding-right: 10px;
     }
-</style>
+</style>      
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="padding: 30px;">
+                <div class="flash-notifications">
+                    <div class="flash-message">
+                        {{ message|safe }}
+                    </div>
+                    <div class="close-flash">  
+                        <img src="/static/images/icons/close.png">
+                    </div>
+                </div>
+            </div>
+            <style>
+                .tasks-left, .tasks-right{
+                    padding-top: 0px;
+                }
+            </style>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="tasks-wrapper">
     <div class="tasks-left">
         {% for task in tasks %}

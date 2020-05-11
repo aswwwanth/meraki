@@ -91,7 +91,7 @@
         padding: 10px;
         margin-top: 10px;
         border-radius: 4px;
-        color: #fff;
+        background-color: #fff;
     }
 
 </style>
@@ -136,14 +136,14 @@
         </div>
         <div class="tasks-right">
             <h3>Stats</h3>
-            <div class="tasks-right-item" style="background: #bf0016;">
-                {{ tasks_pending }} Tasks pending
+            <div class="tasks-right-item">
+                <b>{{ tasks_pending }}</b> Tasks pending
             </div>
-            <div class="tasks-right-item" style="background: #006100;">
-                {{ tasks_completed }} Tasks completed
+            <div class="tasks-right-item">
+                <b>{{ tasks_completed }}</b> Tasks completed
             </div>
-            <div class="tasks-right-item" style="background: #4a4a4a;">
-                {{ tasks_created }} Tasks created
+            <div class="tasks-right-item">
+                <b>{{ tasks_created }}</b> Tasks created
             </div>
         </div>
     </div>

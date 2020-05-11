@@ -1,0 +1,18 @@
+<script>
+    $(document).on('click', '.cancel-delete', function(e) {
+        e.preventDefault();
+        $('.pop-up').css('display', 'none');
+        $('.pop-up').html('');
+        $('#page-mask').css('display', 'none'); 
+    });
+</script>
+<div class="delete-task"style="padding: 60px; text-align: justify;">
+    <h2>Are you sure?</h2>
+    <p style="margin-top: 15px; margin-bottom: 15px;">
+        Deleting a task is <b>permanent and cannot be reverted.</b> All the logged progress associated with the taks will be deleted.
+    </p>
+    <form action="/team/{{ tcode }}/tasks/{{ task.task_code }}/delete/" method="POST">
+        <input type="submit" class="confirm-delete" value="Confirm">
+        <input type="submit" style="margin-left: 10px" class="cancel-delete" value="Cancel">
+    </form>
+</div>
