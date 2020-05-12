@@ -239,7 +239,9 @@
         </div>
         <div class="task-details-right">
             <div>
+                {% if task.tag != "" %}
                 <div><span class="info-block" style="background: #4e4f4e;">{{ task.tag }}</span></div>
+                {% endif %}
                 <div>
                     {% if task.status == True %}
                         <span class="info-block" style="background: #006100">Status: Completed</span>

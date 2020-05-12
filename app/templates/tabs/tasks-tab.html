@@ -136,7 +136,9 @@
                     <div class="task-item-info">
                         <h2>{{ task.title }}</h2>
                         <div class="info-blocks">
+                            {% if task.tag != "" %}
                             <span style="background: #4e4f4e;">{{ task.tag }}</span>
+                            {% endif %}
                             {% if task.status == True %}
                                 <span style="background: #006100">Status: Completed</span>
                             {% elif datetimenow.date() <= task.deadline.date() %}
