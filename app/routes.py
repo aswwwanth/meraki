@@ -560,3 +560,7 @@ def get_private_recent():
         })
 
     return jsonify(payLoad)
+
+@app.route('/video-demo/')
+def video():
+    return redirect('https://youtu.be/Qd0j6bbjSTE')

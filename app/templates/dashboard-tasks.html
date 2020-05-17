@@ -106,7 +106,7 @@
                     {{ date.strftime("%d %b %Y") }}
                 </div>
                 {% for task in tasks[date] %}
-                    <a href="/team/{{ task.team_code }}/tasks/{{ task.task_code }}/">
+                    <a href="/team/{{ task[0].team_code }}/tasks/{{ task[0].task_code }}/">
                         <div class="task-item">
                             <div class="task-item-info">
                                 <p style="font-size: 20px;"><b>{{ task[1] }}</b> \ {{ task[0].title }}</p>
