@@ -278,8 +278,11 @@ def team_tasks_details(tcode, task_code):
     team = Team.query.filter_by(tcode=tcode).first()
     task = Tasks.query.filter_by(task_code=task_code).first()
     milestones = Milestones.query.filter_by(task_code=task_code).order_by(Milestones.id).all()
-    assignees = TasksAssigned.query.filter_by(task_code=task_code).all()
+    assigneesData = TasksAssigned.query.filter_by(task_code=task_code).all()
     task_progress = TaskProgressLog.query.filter_by(task_code=task_code).order_by(TaskProgressLog.time).all()
+    assignees = []
+    for assignee in assigneesData:
+        assignees.append(assignee.user)
     return render_template(
         'tabs/tasks-tab-details.html',
         team=team, 
