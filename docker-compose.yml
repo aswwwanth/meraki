@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on: 
+      - db
+    volumes: 
+      - .:/app
+    networks: 
+      - merkai_net
+  db:
+    image: postgres:latest
+    container_name: pg_db
+    environment: 
+      POSTGRES_USER: meraki
+      POSTGRES_PASSWORD: meraki2020*
+      POSTGRESS_DB: meraki
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresdbvolume:/var/lib/postgresql/data
+    networks: 
+      - merkai_net
+volumes:
+  postgresdbvolume:
+networks: 
+  merkai_net:
