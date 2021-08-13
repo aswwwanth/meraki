@@ -101,34 +101,54 @@
     </div>
     <div class="tasks-grid">
         <div class="tasks-left">
-            <div class="task-item">
-                <div class="task-item-info">
-                    <p style="font-size: 20px;"><b>Dish 1</p>
-                    <div class="info-blocks">
-                        <span style="background: #4e4f4e;">Description</span>    
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <span>Cost: $50</span>
-                    </div>
+            {% for date in tasks %}
+                <div class="date">
+                    {{ date.strftime("%d %b %Y") }}
                 </div>
-                <div class="task-item-deadline">
-                    <p>Quantity: 1</p>
-                </div>
-            </div>
-            <div class="border-line"></div>
+                {% for task in tasks[date] %}
+                    <a href="/team/{{ task[0].team_code }}/tasks/{{ task[0].task_code }}/">
+                        <div class="task-item">
+                            <div class="task-item-info">
+                                <p style="font-size: 20px;"><b>{{ task[1] }}</b> \ {{ task[0].title }}</p>
+                                <div class="info-blocks">
+                                    {% if task[0].tag != "" %}
+                                    <span style="background: #4e4f4e;">{{ task[0].tag }}</span>
+                                    {% endif %}
+                                    {% if task[0].status == True %}
+                                        <span style="background: #006100">Status: Completed</span>
+                                    {% elif datetimenow.date() <= task[0].deadline.date() %}
+                                        <span style="background: #009400">Status: Ongoing</span>
+                                    {% else %}
+                                        <span style="background: #bf0016">Status: Pending</span>  
+                                    {% endif %}    
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <span>Added on: {{ task[0].created_on.strftime("%d %b %Y") }}</span>
+                                </div>
+                            </div>
+                            <div class="task-item-deadline">
+                                <img src="/static/images/icons/deadline.png">
+                                <p>{{ task[0].deadline.strftime("%d %b %Y") }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+                <div class="border-line"></div>
+            {% endfor %}
         </div>
         <div class="tasks-right">
             <h3>Stats</h3>
             <div class="tasks-right-item">
-                <b>Total cost: $50</b>
+                <b>{{ tasks_pending }}</b> Tasks pending
             </div>
             <div class="tasks-right-item">
-                <b>Saved: $0</b>
+                <b>{{ tasks_completed }}</b> Tasks completed
             </div>
             <div class="tasks-right-item">
-                <button>Checkout</button>
+                <b>{{ tasks_created }}</b> Tasks created
             </div>
         </div>
     </div>
+
 </div>
 {% endblock %}
