@@ -1,0 +1,9 @@
+{
+    "name": "meraki",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/app",
+    "forwardPorts": [3000, 5432],
+    "shutdownAction": "stopCompose"
+  }
+  

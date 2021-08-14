@@ -3,14 +3,11 @@ services:
   web:
     container_name: web
     build: .
-    ports:
-      - 5000:5000
     depends_on: 
       - db
     volumes: 
       - .:/app
-    networks: 
-      - merkai_net
+    network_mode: service:db
   db:
     image: postgres:latest
     container_name: pg_db
@@ -20,11 +17,8 @@ services:
       POSTGRESS_DB: meraki
     ports:
       - 5432:5432
+      - 5000:5000
     volumes:
-      - postgresdbvolume:/var/lib/postgresql/data
-    networks: 
-      - merkai_net
+      - postgresdbvolume:/var/lib/postgresql/data 
 volumes:
   postgresdbvolume:
-networks: 
-  merkai_net:

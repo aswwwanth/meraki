@@ -5,7 +5,7 @@ class Config(object):
         'user': 'meraki',
         'pw': 'meraki2020*',
         'db': 'meraki',
-        'host': 'db',
+        'host': 'localhost',
         'port': '5432',
     }
     
