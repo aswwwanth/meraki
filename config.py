@@ -2,11 +2,11 @@ import os
 
 class Config(object):
     POSTGRES = {
-        'user': 'meraki',
-        'pw': 'meraki2020*',
-        'db': 'meraki',
-        'host': 'localhost',
-        'port': '5432',
+        'user': os.environ.get('db_user'),
+        'pw': os.environ.get('db_password'),
+        'db': os.environ.get('db_name'),
+        'host': os.environ.get('db_host'),
+        'port': os.environ.get('db_port'),
     }
     
     SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
