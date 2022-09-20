@@ -5,8 +5,7 @@ WORKDIR /app
 
 ENV FLASK_APP=meraki.py
 
-ADD requirements.txt /app/
-ADD entrypoint.sh /app/
+COPY . /app/
 
 RUN pip install -r requirements.txt
 
