@@ -8,7 +8,7 @@
 <script>
     $(document).ready(function(){   
 
-        var url = 'https://' + document.domain;
+        var url = 'http://' + document.domain;
         if(location.port != '')
             url = 'http://' + document.domain + ':' + location.port;
 
@@ -35,8 +35,6 @@
         });
 
         socket.on('new_private_message', function(data){
-            // console.log("New private message");
-            // console.log(data);
             if(data['username'] != '{{ current_user.username }}' && room != data['username']){
                 $('#id' + data['username']).remove();
                 addUserThread(data, 1);
@@ -131,7 +129,7 @@
 
             removeResults();
             $('#message-field').val('');
-            console.log("Leaving room " + room);
+            // console.log("Leaving room " + room);
             socket.emit('leave_private_room', {'room': room});
             room = username;
             socket.emit('join_private_room', {'room': room});
@@ -148,7 +146,7 @@
                         loadMessages(data['username']);
                     }
                     else
-                        console.log("Invalid user");
+                        // console.log("Invalid user");
                 }
             });
         }

@@ -21,7 +21,7 @@
             }
         });
 
-        var url = 'https://' + document.domain;
+        var url = 'http://' + document.domain;
         if(location.port != '')
             url = 'http://' + document.domain + ':' + location.port;
 
@@ -30,7 +30,7 @@
         socket.emit('join_team_channel', {'room': '{{ team.tcode }}'});
 
         socket.on('general', function(message) {
-            console.log(message);
+            // console.log(message);
         });
 
         // Function to send message
