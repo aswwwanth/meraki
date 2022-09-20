@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name meraki.aswwwanth.com;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/meraki/meraki.sock;
+    }
+}
+
+server {
+    listen 5000;
+    server_name localhost;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/meraki/meraki.sock;
+    }
+}
