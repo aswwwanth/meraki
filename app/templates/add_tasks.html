@@ -43,10 +43,10 @@
                             $('#aid').val("");
                             assigned_users.push(data[i]['username']);
                             $('.close').click(function(){
-                                console.log("TESTING");
+                                // console.log("TESTING");
                                 parentid = $(this).parent().attr('id');
                                 assigned_users.splice(assigned_users.indexOf(parentid));
-                                console.log(assigned_users);
+                                // console.log(assigned_users);
                                 $('#'+parentid).remove();	
                             });
                         }
