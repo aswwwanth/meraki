@@ -10,7 +10,7 @@ services:
     depends_on: 
       - db
     volumes: 
-      - .:/app
+      - ./:/meraki
     network_mode: service:db
   db:
     image: postgres:latest
