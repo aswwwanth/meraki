@@ -23,6 +23,6 @@ services:
       - 5432:5432
       - 5000:5000
     volumes:
-      - postgresdbvolume:/var/lib/postgresql/data 
+      - meraki_db_volume:/var/lib/postgresql/data 
 volumes:
-  postgresdbvolume:
+  meraki_db_volume:
