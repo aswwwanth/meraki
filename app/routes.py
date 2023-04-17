@@ -26,13 +26,12 @@ def is_member():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
 @app.route('/')
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     return render_template("index.html")
- 
+
 @app.route('/register/', methods=['GET','POST'])
 def register():
     form = RegistrationForm()
