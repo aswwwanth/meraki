@@ -6,14 +6,12 @@ server {
         include proxy_params;
         proxy_pass http://unix:/meraki/meraki.sock;
     }
-}
 
-server {
-    listen 5000;
-    server_name localhost;
-
-    location / {
+    location /socket.io {
         include proxy_params;
+        proxy_buffering off;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
         proxy_pass http://unix:/meraki/meraki.sock;
     }
 }
