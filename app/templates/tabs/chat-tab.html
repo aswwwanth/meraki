@@ -21,12 +21,12 @@
             }
         });
 
-        var url = 'http://' + document.domain;
+        var url = 'ws://' + document.domain;
         if(location.port != '')
-            url = 'http://' + document.domain + ':' + location.port;
+            url = 'ws://' + document.domain + ':' + location.port;
 
         // Socket connection
-        var socket = io.connect(url);
+        var socket = io.connect(url, { transports: ["websocket"] });
         socket.emit('join_team_channel', {'room': '{{ team.tcode }}'});
 
         socket.on('general', function(message) {

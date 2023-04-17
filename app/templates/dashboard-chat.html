@@ -8,9 +8,9 @@
 <script>
     $(document).ready(function(){   
 
-        var url = 'http://' + document.domain;
+        var url = 'ws://' + document.domain;
         if(location.port != '')
-            url = 'http://' + document.domain + ':' + location.port;
+            url = 'ws://' + document.domain + ':' + location.port;
 
         $('.dash-side div').removeClass('active');
         $('.dash-side-item.chat').addClass('active');
@@ -19,7 +19,7 @@
 
         var room = window.location.hash.substring(1);
 
-        var socket = io.connect(url);
+        var socket = io.connect(url, { transports: ["websocket"] });
 
         socket.emit('join_private_room', {'room': room});
         socket.emit('join_new_messages_room');
